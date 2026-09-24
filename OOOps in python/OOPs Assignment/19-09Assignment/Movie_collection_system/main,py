@@ -1,0 +1,19 @@
+print("""======================================
+ASSIGNMENT 7 – MOVIE COLLECTION SYSTEM
+======================================""")
+
+from model import movie
+
+m1=movie()
+m2=movie()
+m3=movie()
+m4=movie()
+m5=movie()
+
+m1.display()
+m1.rating_()
+m1.action()
+m1.high_rating()
+m1.found_movie()
+m1.average()
+m1.greater()
