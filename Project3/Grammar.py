@@ -1,6 +1,5 @@
 import language_tool_python
 
-
 tool = language_tool_python.LanguageTool("en-US")
 
 def grammar_check(text):
@@ -14,4 +13,5 @@ def grammar_check(text):
             "category":match.category
         }
         results.append(result)
-    return results
+    correct=tool.correct(text)
+    return results,correct

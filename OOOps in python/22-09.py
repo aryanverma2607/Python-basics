@@ -1,4 +1,4 @@
-# class Parent:
+ṭñḍ# class Parent:
 #     def show(self):
 #         print("This is parent method")
 # class child(Parent):
