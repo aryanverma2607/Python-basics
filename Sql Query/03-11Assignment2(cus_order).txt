@@ -1,0 +1,157 @@
+QNO 2:
+
+Customer and Orders
+Problem Statement:
+A retail store wants to generate a report displaying all customers and their latest order details. The report should include customers who have not placed any orders.
+mysql> select c.cust_name,max(o.order_date) from customer2 as c left join orders2 as o on o.cust_id=c.cust_id group by c.cust_id,c.cust_name;
++-----------+-------------------+
+| cust_name | max(o.order_date) |
++-----------+-------------------+
+| Alice     | 2026-10-15        |
+| Bob       | 2026-10-20        |
+| Charlie   | 2026-10-10        |
+| David     | 2026-10-28        |
+| Rahul     | NULL              |
+| Priya     | NULL              |
++-----------+-------------------+
+6 rows in set (0.00 sec)
+
+
+Tables:
+Customer (cust_id, cust_name)
+mysql> create table customer2(cust_id int primary key auto_increment,cust_name varchar(30));
+Query OK, 0 rows affected (0.10 sec)
+mysql> desc customer2;
++-----------+-------------+------+-----+---------+----------------+
+| Field     | Type        | Null | Key | Default | Extra          |
++-----------+-------------+------+-----+---------+----------------+
+| cust_id   | int         | NO   | PRI | NULL    | auto_increment |
+| cust_name | varchar(30) | YES  |     | NULL    |                |
++-----------+-------------+------+-----+---------+----------------+
+2 rows in set (0.07 sec)
+
+
+Orders (order_id, cust_id, order_date, total_amount)
+mysql> create table orders2(order_id int primary key,cust_id int,order_date date,total_amount int,constraint FK_orders2_customers2 foreign key(cust_id) references customer2(cust_id));
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> desc orders2;
++--------------+------+------+-----+---------+-------+
+| Field        | Type | Null | Key | Default | Extra |
++--------------+------+------+-----+---------+-------+
+| order_id     | int  | NO   | PRI | NULL    |       |
+| cust_id      | int  | YES  | MUL | NULL    |       |
+| order_date   | date | YES  |     | NULL    |       |
+| total_amount | int  | YES  |     | NULL    |       |
++--------------+------+------+-----+---------+-------+
+4 rows in set (0.02 sec)
+
+
+
+Query 1:
+Write an SQL query using LEFT JOIN to display all customers with their order details, ensuring that customers with no orders are still included in the result.
+mysql> select c.cust_name,o.order_id,o.cust_id,o.order_date,o.total_amount from customer2 as c left join orders2 as o on c.cust_id=o.cust_id;
++-----------+----------+---------+------------+--------------+
+| cust_name | order_id | cust_id | order_date | total_amount |
++-----------+----------+---------+------------+--------------+
+| Alice     |      101 |       1 | 2026-10-01 |         2500 |
+| Alice     |      102 |       1 | 2026-10-15 |         3500 |
+| Bob       |      103 |       2 | 2026-10-05 |         1500 |
+| Bob       |      104 |       2 | 2026-10-20 |         4500 |
+| Charlie   |      105 |       3 | 2026-10-10 |         2000 |
+| David     |      106 |       4 | 2026-10-25 |         5000 |
+| David     |      107 |       4 | 2026-10-28 |         3000 |
+| Rahul     |     NULL |    NULL | NULL       |         NULL |
+| Priya     |     NULL |    NULL | NULL       |         NULL |
++-----------+----------+---------+------------+--------------+
+9 rows in set (0.00 sec)
+
+Query 2:
+Problem Statement:
+The store wants to generate a report including all orders placed, even if the customer record is missing (i.e., orphan orders due to data inconsistency).
+mysql> select o.order_id,o.cust_id,o.order_date,o.total_amount,c.cust_id,cust_name from orders2 as o left join customer2 as c on c.cust_id=o.cust_id;
++----------+---------+------------+--------------+---------+-----------+
+| order_id | cust_id | order_date | total_amount | cust_id | cust_name |
++----------+---------+------------+--------------+---------+-----------+
+|      101 |       1 | 2026-10-01 |         2500 |       1 | Alice     |
+|      102 |       1 | 2026-10-15 |         3500 |       1 | Alice     |
+|      103 |       2 | 2026-10-05 |         1500 |       2 | Bob       |
+|      104 |       2 | 2026-10-20 |         4500 |       2 | Bob       |
+|      105 |       3 | 2026-10-10 |         2000 |       3 | Charlie   |
+|      106 |       4 | 2026-10-25 |         5000 |       4 | David     |
+|      107 |       4 | 2026-10-28 |         3000 |       4 | David     |
++----------+---------+------------+--------------+---------+-----------+
+7 rows in set (0.01 sec)
+
+
+Query 3:
+The store wants a comprehensive report showing all customers and all orders, even if some customers have no orders and some orders have missing customer details.
+mysql> select c.cust_name,o.order_id from customer2 as c left join orders2 as o on o.cust_id=c.cust_id union select c.cust_name,o.order_id from orders2 as o left join customer2 as c on c.cust_id=o.cust_id;
++-----------+----------+
+| cust_name | order_id |
++-----------+----------+
+| Alice     |      101 |
+| Alice     |      102 |
+| Bob       |      103 |
+| Bob       |      104 |
+| Charlie   |      105 |
+| David     |      106 |
+| David     |      107 |
+| Rahul     |     NULL |
+| Priya     |     NULL |
++-----------+----------+
+9 rows in set (0.00 sec)
+
+Query 4:
+Problem Statement:
+The store wants to analyze all possible customer-order pairings, regardless of actual transactions.
+mysql> select o.order_id,c.cust_id,c.cust_name from orders2 as o cross join customer2 as c;
++----------+---------+-----------+
+| order_id | cust_id | cust_name |
++----------+---------+-----------+
+|      101 |       6 | Priya     |
+|      101 |       5 | Rahul     |
+|      101 |       4 | David     |
+|      101 |       3 | Charlie   |
+|      101 |       2 | Bob       |
+|      101 |       1 | Alice     |
+|      102 |       6 | Priya     |
+|      102 |       5 | Rahul     |
+|      102 |       4 | David     |
+|      102 |       3 | Charlie   |
+|      102 |       2 | Bob       |
+|      102 |       1 | Alice     |
+|      103 |       6 | Priya     |
+|      103 |       5 | Rahul     |
+|      103 |       4 | David     |
+|      103 |       3 | Charlie   |
+|      103 |       2 | Bob       |
+|      103 |       1 | Alice     |
+|      104 |       6 | Priya     |
+|      104 |       5 | Rahul     |
+|      104 |       4 | David     |
+|      104 |       3 | Charlie   |
+|      104 |       2 | Bob       |
+|      104 |       1 | Alice     |
+|      105 |       6 | Priya     |
+|      105 |       5 | Rahul     |
+|      105 |       4 | David     |
+|      105 |       3 | Charlie   |
+|      105 |       2 | Bob       |
+|      105 |       1 | Alice     |
+|      106 |       6 | Priya     |
+|      106 |       5 | Rahul     |
+|      106 |       4 | David     |
+|      106 |       3 | Charlie   |
+|      106 |       2 | Bob       |
+|      106 |       1 | Alice     |
+|      107 |       6 | Priya     |
+|      107 |       5 | Rahul     |
+|      107 |       4 | David     |
+|      107 |       3 | Charlie   |
+|      107 |       2 | Bob       |
+|      107 |       1 | Alice     |
++----------+---------+-----------+
+42 rows in set (0.00 sec)
+
+

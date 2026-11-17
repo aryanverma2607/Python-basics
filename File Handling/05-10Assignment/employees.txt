@@ -1,0 +1,4 @@
+101,ajay,it,65000
+102,ravi,hr,45000
+103,priya,it,72000
+104,amit,sales,48000

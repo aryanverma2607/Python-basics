@@ -1,0 +1,3 @@
+Python is easy.
+Python is powerful.
+Python is widely used in industry.

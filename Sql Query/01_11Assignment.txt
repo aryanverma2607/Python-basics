@@ -1,0 +1,539 @@
+QNO 1:
+A company wants to manage its employees and their respective departments. Each employee must belong to a department. If a department is deleted, all employees in that department should also be removed automatically.
+
+create database assignment01_11;
+Query OK, 1 row affected (0.09 sec)
+Tasks:
+1. Create the Departments Table
+Each department has a unique ID (DepartmentID).
+The department name must be unique.
+The department name cannot be NULL.
+
+mysql> create table department(d_id int unique,dname varchar(20) not null unique);
+mysql> desc department;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| d_id  | int         | YES  | UNI | NULL    |       |
+| dname | varchar(20) | NO   | PRI | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+
+
+2. Create the Employees Table
+Each employee has a unique ID (EmployeeID).
+Each employee has a name and salary, both cannot be NULL.
+Each employee must be assigned to a department (DepartmentID), which is a FOREIGN KEY referencing Departments(DepartmentID).
+If a department is deleted, all employees in that department should also be deleted.
+
+mysql> create table employee(e_id int unique,ename varchar(30) not null,salary decimal(10,2) not null,department_id int,constraint FK_employee_department foreign key(department_id) references department(d_id) on delete cascade);
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> desc employee;
++---------+---------------+------+-----+---------+-------+
+| Field   | Type          | Null | Key | Default | Extra |
++---------+---------------+------+-----+---------+-------+
+| e_id    | int           | YES  | UNI | NULL    |       |
+| ename   | varchar(30)   | NO   |     | NULL    |       |
+| salaery | decimal(10,2) | NO   |     | NULL    |       |
++---------+---------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+
+3. Insert Sample Data
+Insert at least 3 departments.
+mysql> insert into department values(1,'CS'),
+    -> (2,"IT"),
+    -> (3,'Developer');
+
+
+Insert at least 5 employees (make sure at least two employees belong to the same department).
+mysql> insert into employee values
+    -> (101,'Diggi',55000,1),
+    -> (102,'Nayan',45000,2),
+    -> (103,'KP',65000,2),
+    -> (104,"Niteen",50000,1),
+    -> (105,"Ajay",35000,3);
+Query OK, 5 rows affected (0.02 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from employee;
++------+--------+----------+---------------+
+| e_id | ename  | salary   | department_id |
++------+--------+----------+---------------+
+|  101 | Diggi  | 55000.00 |             1 |
+|  102 | Nayan  | 45000.00 |             2 |
+|  103 | KP     | 65000.00 |             2 |
+|  104 | Niteen | 50000.00 |             1 |
+|  105 | Ajay   | 35000.00 |             3 |
++------+--------+----------+---------------+
+5 rows in set (0.01 sec)
+
+4. Implement Query Constraints (Without Using JOIN)
+
+Write a query to list all employees and their department names (without using JOIN).
+mysql> select e.ename,d.dname from employee e,department d where department_id=d_id;
++--------+-----------+
+| ename  | dname     |
++--------+-----------+
+| Diggi  | CS        |
+| Niteen | CS        |
+| Nayan  | IT        |
+| KP     | IT        |
+| Ajay   | Developer |
++--------+-----------+
+5 rows in set (0.02 sec)
+
+Write a query to update an employee's department.
+mysql> update employee set department_id=2 where department_id=3;
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from employee;
++------+--------+----------+---------------+
+| e_id | ename  | salary   | department_id |
++------+--------+----------+---------------+
+|  101 | Diggi  | 55000.00 |             1 |
+|  102 | Nayan  | 45000.00 |             2 |
+|  103 | KP     | 65000.00 |             2 |
+|  104 | Niteen | 50000.00 |             1 |
+|  105 | Ajay   | 35000.00 |             2 |
++------+--------+----------+---------------+
+5 rows in set (0.00 sec)
+Try deleting a department and observe what happens to the employees under that department.
+mysql> select * from employee;
++------+--------+----------+---------------+
+| e_id | ename  | salary   | department_id |
++------+--------+----------+---------------+
+|  101 | Diggi  | 55000.00 |             1 |
+|  102 | Nayan  | 45000.00 |             2 |
+|  103 | KP     | 65000.00 |             2 |
+|  104 | Niteen | 50000.00 |             1 |
+|  105 | Ajay   | 35000.00 |             2 |
++------+--------+----------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> delete from employee where department_id=1;
+Query OK, 2 rows affected (0.02 sec)
+
+mysql> select * from employee;
++------+-------+----------+---------------+
+| e_id | ename | salary   | department_id |
++------+-------+----------+---------------+
+|  102 | Nayan | 45000.00 |             2 |
+|  103 | KP    | 65000.00 |             2 |
+|  105 | Ajay  | 35000.00 |             2 |
++------+-------+----------+---------------+
+3 rows in set (0.00 sec)
+
+
+QNO 2:-
+
+A hospital wants to store patient records and their assigned doctors. If a doctor leaves, all related patient records should be deleted.
+
+Tasks:
+Create a Doctors table:
+
+DoctorID (PRIMARY KEY, AUTO_INCREMENT)
+DoctorName (NOT NULL)
+Specialization (NOT NULL, UNIQUE)
+mysql> create table doctors(doctor_id int primary key auto_increment,doctor_name varchar(20) not null,specializarion varchar(20) not null unique);
+Query OK, 0 rows affected (0.12 sec)
+
+mysql> desc doctors;
++----------------+-------------+------+-----+---------+----------------+
+| Field          | Type        | Null | Key | Default | Extra          |
++----------------+-------------+------+-----+---------+----------------+
+| doctor_id      | int         | NO   | PRI | NULL    | auto_increment |
+| doctor_name    | varchar(20) | NO   |     | NULL    |                |
+| specializarion | varchar(20) | NO   | UNI | NULL    |                |
++----------------+-------------+------+-----+---------+----------------+
+3 rows in set (0.03 sec)
+
+
+Create a Patients table:
+
+PatientID (PRIMARY KEY, AUTO_INCREMENT)
+PatientName (NOT NULL)
+DoctorID (FOREIGN KEY)
+
+mysql> create table patient(patient_id int primary key auto_increment,patient_name varchar(20) not null,doctor_id int,constraint FK_patient_doctors foreign key(doctor_id) references doctors(doctor_id) on delete cascade);
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> desc patient;
++--------------+-------------+------+-----+---------+----------------+
+| Field        | Type        | Null | Key | Default | Extra          |
++--------------+-------------+------+-----+---------+----------------+
+| patient_id   | int         | NO   | PRI | NULL    | auto_increment |
+| patient_name | varchar(20) | NO   |     | NULL    |                |
+| doctor_id    | int         | YES  | MUL | NULL    |                |
++--------------+-------------+------+-----+---------+----------------+
+3 rows in set (0.02 sec)
+
+Insert sample data (at least 3 doctors and 5 patients).
+mysql> insert into doctors values
+    -> (1001,"Dr.Nima","Gynecologist"),
+    -> (1003,"Dr.Nilesh","Homeopathy"),
+    -> (1005,"Dr.Divya","Dentist");
+Query OK, 3 rows affected (0.04 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from doctors;
++-----------+-------------+----------------+
+| doctor_id | doctor_name | specializarion |
++-----------+-------------+----------------+
+|      1001 | Dr.Nima     | Gynecologist   |
+|      1003 | Dr.Nilesh   | Homeopathy     |
+|      1005 | Dr.Divya    | Dentist        |
++-----------+-------------+----------------+
+3 rows in set (0.01 sec)
+
+mysql> insert into patient(patient_name,doctor_id)
+    -> values
+    -> ("Kunal",1003),
+    -> ("Yashika",1001),
+    -> ("Rashmi",1001),
+    -> ("Keval",1005),
+    -> ("Niteen",1003);
+Query OK, 5 rows affected (0.02 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from patient;
++------------+--------------+-----------+
+| patient_id | patient_name | doctor_id |
++------------+--------------+-----------+
+|          1 | Kunal        |      1003 |
+|          2 | Yashika      |      1001 |
+|          3 | Rashmi       |      1001 |
+|          4 | Keval        |      1005 |
+|          5 | Niteen       |      1003 |
++------------+--------------+-----------+
+5 rows in set (0.00 sec)
+
+Delete a doctor and check if related patients are removed automatically.
+mysql> delete from doctors where doctor_id=1003;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from patient;
++------------+--------------+-----------+
+| patient_id | patient_name | doctor_id |
++------------+--------------+-----------+
+|          2 | Yashika      |      1001 |
+|          3 | Rashmi       |      1001 |
+|          4 | Keval        |      1005 |
++------------+--------------+-----------+
+3 rows in set (0.00 sec)
+
+
+Update a patient’s doctor to a new doctor.
+mysql> update patient set doctor_id=1005 where doctor_id=1003;
+Query OK, 2 rows affected (0.02 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> select * from patient;
++------------+--------------+-----------+
+| patient_id | patient_name | doctor_id |
++------------+--------------+-----------+
+|          1 | Kunal        |      1005 |
+|          2 | Yashika      |      1001 |
+|          3 | Rashmi       |      1001 |
+|          4 | Keval        |      1005 |
+|          5 | Niteen       |      1005 |
++------------+--------------+-----------+
+5 rows in set (0.00 sec)
+
+
+QNO 3:
+A library maintains a record of books and their authors. If an author is removed, their books should not be deleted, but their author information should be set to NULL.
+
+Tasks:
+Create an Authors table:
+
+AuthorID (PRIMARY KEY, AUTO_INCREMENT)
+AuthorName (NOT NULL, UNIQUE)
+
+mysql> CREATE TABLE IF NOT EXISTS AUTHORS(AUTHORID INT PRIMARY KEY AUTO_INCREMENT,AUTHORNAME VARCHAR(30) NOT NULL UNIQUE);
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> DESC AUTHORS;
++------------+-------------+------+-----+---------+----------------+
+| Field      | Type        | Null | Key | Default | Extra          |
++------------+-------------+------+-----+---------+----------------+
+| AUTHORID   | int         | NO   | PRI | NULL    | auto_increment |
+| AUTHORNAME | varchar(30) | NO   | UNI | NULL    |                |
++------------+-------------+------+-----+---------+----------------+
+2 rows in set (0.00 sec)
+
+Create a Books table:
+
+BookID (PRIMARY KEY, AUTO_INCREMENT)
+BookTitle (NOT NULL, UNIQUE)
+AuthorID (FOREIGN KEY )
+
+mysql> CREATE TABLE BOOKS(BOOKID INT PRIMARY KEY AUTO_INCREMENT,BOOKTITLE VARCHAR(20) NOT NULL UNIQUE,AUTHORID INT,CONSTRAINT FK_BOOKS_AUTHORS FOREIGN KEY(AUTHORID) REFERENCES AUTHORS(AUTHORID) ON DELETE SET NULL) AUTO_INCREMENT=100;
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> DESC BOOKS;
++-----------+-------------+------+-----+---------+----------------+
+| Field     | Type        | Null | Key | Default | Extra          |
++-----------+-------------+------+-----+---------+----------------+
+| BOOKID    | int         | NO   | PRI | NULL    | auto_increment |
+| BOOKTITLE | varchar(20) | NO   | UNI | NULL    |                |
+| AUTHORID  | int         | YES  | MUL | NULL    |                |
++-----------+-------------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+
+Insert sample data (at least 3 authors and 5 books).
+mysql> INSERT INTO AUTHORS(AUTHORNAME) VALUES
+    -> ("J.K. Rowling"),
+    -> ("SHIV KHERA"),
+    -> ("DIVYA PRAKASH DUBEY");
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM AUTHORS;
++----------+---------------------+
+| AUTHORID | AUTHORNAME          |
++----------+---------------------+
+|        3 | DIVYA PRAKASH DUBEY |
+|        1 | J.K. Rowling        |
+|        2 | SHIV KHERA          |
++----------+---------------------+
+3 rows in set (0.00 sec)
+
+
+mysql> INSERT INTO BOOKS(BOOKTITLE,AUTHORID)
+    -> VALUES
+    -> ("Harry Potter",1),
+    -> ("MUSAFIR CAFE",3),
+    -> ("Five Point Someone",1),
+    -> ("The Alchemist",2),
+    -> ("OCTOBER JUNCTION",3);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM BOOKS;
++--------+--------------------+----------+
+| BOOKID | BOOKTITLE          | AUTHORID |
++--------+--------------------+----------+
+|    100 | Harry Potter       |        1 |
+|    101 | MUSAFIR CAFE       |        3 |
+|    102 | Five Point Someone |        1 |
+|    103 | The Alchemist      |        2 |
+|    104 | OCTOBER JUNCTION   |        3 |
++--------+--------------------+----------+
+5 rows in set (0.00 sec)
+
+Delete an author and check if books remain, but the AuthorID is set to NULL.
+mysql> DELETE FROM BOOKS WHERE AUTHORID=2;
+
+Update the author of a book to a new author.
+mysql> UPDATE BOOKS SET AUTHORID=1 WHERE AUTHORID=3;
+Query OK, 2 rows affected (0.02 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> SELECT * FROM BOOKS;
++--------+------------------+----------+
+| BOOKID | BOOKTITLE        | AUTHORID |
++--------+------------------+----------+
+|    101 | MUSAFIR CAFE     |        1 |
+|    104 | OCTOBER JUNCTION |        1 |
++--------+------------------+----------+
+2 rows in set (0.00 sec)
+
+
+QNO 4:
+A university wants to track students' exam results. If a student is deleted, their results should also be deleted.
+Tasks:
+Create a Students table:
+StudentID (PRIMARY KEY, AUTO_INCREMENT)
+StudentName (NOT NULL)
+
+mysql> CREATE TABLE STUDENT(STUDENTID INT PRIMARY KEY AUTO_INCREMENT,STUDENTNAME VARCHAR(20) NOT NULL);
+Query OK, 0 rows affected (0.14 sec)
+
+mysql> DESC STUDENT;
++-------------+-------------+------+-----+---------+----------------+
+| Field       | Type        | Null | Key | Default | Extra          |
++-------------+-------------+------+-----+---------+----------------+
+| STUDENTID   | int         | NO   | PRI | NULL    | auto_increment |
+| STUDENTNAME | varchar(20) | NO   |     | NULL    |                |
++-------------+-------------+------+-----+---------+----------------+
+2 rows in set (0.04 sec)
+
+
+Create an Exams table:
+ExamID (PRIMARY KEY, AUTO_INCREMENT)
+SubjectName (NOT NULL, UNIQUE)
+mysql> CREATE TABLE EXAMS(EXAMID INT PRIMARY KEY AUTO_INCREMENT,SUBJECTNAME VARCHAR(20) NOT NULL UNIQUE);
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> DESC EXAMS;
++-------------+-------------+------+-----+---------+----------------+
+| Field       | Type        | Null | Key | Default | Extra          |
++-------------+-------------+------+-----+---------+----------------+
+| EXAMID      | int         | NO   | PRI | NULL    | auto_increment |
+| SUBJECTNAME | varchar(20) | NO   | UNI | NULL    |                |
++-------------+-------------+------+-----+---------+----------------+
+2 rows in set (0.00 sec)
+
+Create a Results table:
+ResultID (PRIMARY KEY, AUTO_INCREMENT)
+StudentID (FOREIGN key)
+ExamID (FOREIGN KEY)
+Score (NOT NULL, CHECK Score BETWEEN 0 AND 100)
+
+mysql> CREATE TABLE RESULT (
+    ->     RESULTID INT PRIMARY KEY AUTO_INCREMENT,
+    ->     STUDENTID INT,
+    ->     EXAMID INT,
+    ->     SCORE INT NOT NULL CHECK (SCORE BETWEEN 0 AND 100),
+    ->     CONSTRAINT FK_RESULT_STUDENT
+    ->     FOREIGN KEY (STUDENTID)
+    ->     REFERENCES STUDENT(STUDENTID)
+    ->     ON DELETE CASCADE,
+    ->     CONSTRAINT FK_RESULT_EXAM
+    ->     FOREIGN KEY (EXAMID)
+    ->     REFERENCES EXAMS(EXAMID)
+    ->     ON UPDATE CASCADE
+    -> );
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> DESC RESULT;
++-----------+------+------+-----+---------+----------------+
+| Field     | Type | Null | Key | Default | Extra          |
++-----------+------+------+-----+---------+----------------+
+| RESULTID  | int  | NO   | PRI | NULL    | auto_increment |
+| STUDENTID | int  | YES  | MUL | NULL    |                |
+| EXAMID    | int  | YES  | MUL | NULL    |                |
+| SCORE     | int  | NO   |     | NULL    |                |
++-----------+------+------+-----+------
+
+Insert sample data (at least 3 students, 3 exams, and 5 results).
+
+mysql> INSERT INTO STUDENT(STUDENTNAME)
+    -> VALUES
+    -> ("YOGESH"),
+    -> ("NAYAN"),
+    -> ("KRISHNA"),
+    -> ("MUSKAN"),
+    -> ("PALAK"),
+    -> ("DIGVIJAY"),
+    -> ("MONA"),
+    -> ("NITEEN"),
+    -> ("PRIYA");
+Query OK, 9 rows affected (0.03 sec)
+Records: 9  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM STUDENT;
++-----------+-------------+
+| STUDENTID | STUDENTNAME |
++-----------+-------------+
+|         1 | YOGESH      |
+|         2 | NAYAN       |
+|         3 | KRISHNA     |
+|         4 | MUSKAN      |
+|         5 | PALAK       |
+|         6 | DIGVIJAY    |
+|         7 | MONA        |
+|         8 | NITEEN      |
+|         9 | PRIYA       |
++-----------+-------------+
+9 rows in set (0.00 sec)
+
+mysql> DESC EXAMS;
++-------------+-------------+------+-----+---------+----------------+
+| Field       | Type        | Null | Key | Default | Extra          |
++-------------+-------------+------+-----+---------+----------------+
+| EXAMID      | int         | NO   | PRI | NULL    | auto_increment |
+| SUBJECTNAME | varchar(20) | NO   | UNI | NULL    |                |
++-------------+-------------+------+-----+---------+----------------+
+2 rows in set (0.00 sec)
+
+mysql> INSERT INTO EXAMS(SUBJECTNAME)
+    -> VALUES
+    -> ("PYTHON"),
+    -> ("JAVA"),
+    -> ("REACT");
+Query OK, 3 rows affected (0.02 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM EXAMS;
++--------+-------------+
+| EXAMID | SUBJECTNAME |
++--------+-------------+
+|      2 | JAVA        |
+|      1 | PYTHON      |
+|      3 | REACT       |
++--------+-------------+
+3 rows in set (0.00 sec)
+
+
+mysql> INSERT INTO RESULT(STUDENTID,EXAMID,SCORE)
+    -> VALUES
+    -> (2,2,80),
+    -> (1,1,65),
+    -> (3,1,60),
+    -> (4,3,45),
+    -> (5,3,75),
+    -> (6,1,80);
+Query OK, 6 rows affected (0.03 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM RESULT;
++----------+-----------+--------+-------+
+| RESULTID | STUDENTID | EXAMID | SCORE |
++----------+-----------+--------+-------+
+|        1 |         2 |      2 |    80 |
+|        2 |         1 |      1 |    65 |
+|        3 |         3 |      1 |    60 |
+|        4 |         4 |      3 |    45 |
+|        5 |         5 |      3 |    75 |
+|        6 |         6 |      1 |    80 |
++----------+-----------+--------+-------+
+6 rows in set (0.00 sec)
+
+
+Delete a student and check if their results are removed automatically.
+mysql> DELETE FROM STUDENT WHERE STUDENTID=1;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> SELECT * FROM RESULT;
++----------+-----------+--------+-------+
+| RESULTID | STUDENTID | EXAMID | SCORE |
++----------+-----------+--------+-------+
+|        1 |         2 |      2 |    80 |
+|        3 |         3 |      1 |    60 |
+|        4 |         4 |      3 |    45 |
+|        5 |         5 |      3 |    75 |
+|        6 |         6 |      1 |    80 |
++----------+-----------+--------+-------+
+5 rows in set (0.00 sec)
+
+
+Update an exam’s subject name and observe the effect.
+
+mysql> UPDATE EXAMS SET EXAMID=10 WHERE EXAMID=3;
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM RESULT;
++----------+-----------+--------+-------+
+| RESULTID | STUDENTID | EXAMID | SCORE |
++----------+-----------+--------+-------+
+|        1 |         2 |      2 |    80 |
+|        3 |         3 |      1 |    60 |
+|        4 |         4 |     10 |    45 |
+|        5 |         5 |     10 |    75 |
+|        6 |         6 |      1 |    80 |
++----------+-----------+--------+-------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM EXAMS;
++--------+-------------+
+| EXAMID | SUBJECTNAME |
++--------+-------------+
+|      2 | JAVA        |
+|      1 | PYTHON      |
+|     10 | SQL         |
++--------+-------------+
+3 rows in set (0.00 sec)

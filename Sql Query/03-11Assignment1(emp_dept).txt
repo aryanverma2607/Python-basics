@@ -1,0 +1,144 @@
+Assignment 1:
+ Understanding INNER JOIN
+Problem Statement:
+Consider the following tables:
+Employees
+
+mysql> create table employee(emp_id int primary key auto_increment,emp_name varchar(20),dept_id int) auto_increment=101;
+Query OK, 0 rows affected (0.23 sec)
+
+emp_id emp_name dept_id
+1 Alice 101
+2 Bob 102
+3 Charlie 103
+4 David 101
+
+mysql> select * from employee;
++--------+----------+---------+
+| emp_id | emp_name | dept_id |
++--------+----------+---------+
+|      1 | Alice    |     101 |
+|      2 | Bob      |     102 |
+|      3 | Charlie  |     103 |
+|      4 | David    |     101 |
++--------+----------+---------+
+4 rows in set (0.02 sec)
+Departments
+dept_id  dept_name
+101      HR
+102     IT
+104     Finance
+
+mysql> create table department(dept_id int primary key,dept_name varchar(20));
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> select * from department;
++---------+-----------+
+| dept_id | dept_name |
++---------+-----------+
+|     101 | HR        |
+|     102 | IT        |
+|     103 | Finance   |
++---------+-----------+
+3 rows in set (0.00 sec)
+
+Tasks:
+
+Write a query to display employees and their corresponding department names using INNER JOIN.
+mysql> select e.emp_name,d.dept_name from employee as e inner join department as d on e.dept_id = d.dept_id;
++----------+-----------+
+| emp_name | dept_name |
++----------+-----------+
+| Alice    | HR        |
+| Bob      | IT        |
+| Charlie  | Finance   |
+| David    | HR        |
++----------+-----------+
+4 rows in set (0.02 sec)
+
+
+Modify the query to display only employees who belong to the "HR" department.
+mysql> select e.emp_name,d.dept_name from employee as e inner join department as d on e.dept_id = d.dept_id where dept_name='HR';
++----------+-----------+
+| emp_name | dept_name |
++----------+-----------+
+| Alice    | HR        |
+| David    | HR        |
++----------+-----------+
+2 rows in set (0.02 sec)
+
+
+
+Assignment 2: LEFT JOIN Practice
+
+Using the same Employees and Departments tables, answer the following:
+Tasks:
+Write a query using LEFT JOIN to display all employees and their department names, including employees with no department.
+mysql> select e.emp_name as employeename,d.dept_name as departmentname from employee as e left join department as d on e.dept_id=d.dept_id;
++--------------+----------------+
+| employeename | departmentname |
++--------------+----------------+
+| Alice        | HR             |
+| Bob          | IT             |
+| Charlie      | Finance        |
+| David        | HR             |
+| Kevalya      | NULL           |
++--------------+----------------+
+5 rows in set (0.00 sec)
+
+Modify the query to count how many employees are without a department.
+mysql> select e.emp_name as employeename,count(*) as totalemployee from employee as e left join department as d on e.dept_id=d.dept_id where d.dept_id is null group by e.emp_id,e.emp_name;
++--------------+---------------+
+| employeename | totalemployee |
++--------------+---------------+
+| Kevalya      |             1 |
++--------------+---------------+
+1 row in set (0.01 sec)
+
+Assignment 3: RIGHT JOIN Practice
+Problem Statement:
+Consider the same tables.
+Tasks:
+Write a query using RIGHT JOIN to display all departments and their employees, including departments with no employees.
+mysql> select d.dept_name,e.emp_name from department as d right join employee as e on e.dept_id=d.dept_id;
++-----------+----------+
+| dept_name | emp_name |
++-----------+----------+
+| HR        | Alice    |
+| IT        | Bob      |
+| Finance   | Charlie  |
+| HR        | David    |
+| NULL      | Kevalya  |
++-----------+----------+
+5 rows in set (0.00 sec)
+
+
+Find the names of departments that have no employees assigned.
+mysql> select d.dept_name,e.emp_name from employee as e right join department as d on e.dept_id=d.dept_id where e.dept_id is null;
++-----------+----------+
+| dept_name | emp_name |
++-----------+----------+
+| Sales     | NULL     |
+| Executive | NULL     |
++-----------+----------+
+2 rows in set (0.00 sec)
+
+
+
+Assignment 4: FULL OUTER JOIN Simulation
+Problem Statement:
+Since MySQL does not support FULL OUTER JOIN directly, use a combination of LEFT JOIN and RIGHT JOIN to display all employees and departments, ensuring that unmatched records are also included.
+
+mysql> select e.emp_name,d.dept_name from employee as e left join department as d on e.dept_id=d.dept_id union select e.emp_name,d.dept_name from employee as e right join department as d on d.dept_id=e.dept_id;
++----------+-----------+
+| emp_name | dept_name |
++----------+-----------+
+| Alice    | HR        |
+| Bob      | IT        |
+| Charlie  | Finance   |
+| David    | HR        |
+| Kevalya  | NULL      |
+| NULL     | Sales     |
+| NULL     | Executive |
++----------+-----------+
+7 rows in set (0.00 sec)

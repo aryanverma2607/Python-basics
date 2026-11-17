@@ -1,0 +1,836 @@
+Assignment 1— Employee Management System
+
+You are developing an Employee Management System for a company.
+
+mysql> create DATABASE employee_management;
+
+Query OK, 1 row affected (0.01 sec)
+
+mysql> USE employee_management;
+
+Database changed
+
+Create an employees table with the following information:
+
+Employee ID
+
+Employee Name
+
+Department
+
+City
+
+Salary
+
+Experience in years
+
+Age
+
+Joining Date
+
+Sample Data
+
+mysql> CREATE TABLE employees (
+
+    ->     employee_id INT PRIMARY KEY AUTO_INCREMENT,
+
+    ->     employee_name VARCHAR(50),
+
+    ->     department VARCHAR(20),
+
+    ->     city VARCHAR(30),
+
+    ->     salary INT,
+
+    ->     experience INT,
+
+    ->     age INT,
+
+    ->     joining_date DATE
+
+    -> );
+
+Query OK, 0 rows affected (0.04 sec)
+
+Insert at least 15 employees with different values.
+
+Your data must include:
+
+At least 4 different departments — IT, HR, Finance, Sales
+
+At least 5 different cities — Indore, Bhopal, Pune, Mumbai, Bangalore
+
+Salaries ranging from ₹30,000 to ₹1,00,000
+
+Experience ranging from 1 to 10 years
+
+Age ranging from 22 to 40 years
+
+Joining dates from 2020 to 2026
+
+Some employees should have the same department
+
+Some employees should have the same city
+
+Some employees should have similar salaries
+
+Include employees who joined in different years
+
+mysql> INSERT INTO employees
+
+    -> (employee_name, department, city, salary, experience, age, joining_date)
+
+    -> VALUES
+
+    -> ('Aman Sharma', 'IT', 'Indore', 50000, 3, 25, '2023-06-15'),
+
+    -> ('Priya Verma', 'HR', 'Bhopal', 40000, 2, 24, '2024-03-10'),
+
+    -> ('Rahul Singh', 'Finance', 'Pune', 65000, 5, 29, '2021-08-20'),
+
+    -> ('Neha Patel', 'Sales', 'Mumbai', 55000, 4, 27, '2022-11-05'),
+
+    -> ('Rohit Jain', 'IT', 'Bangalore', 80000, 7, 32, '2020-02-18'),
+
+    -> ('Sneha Gupta', 'HR', 'Indore', 45000, 3, 26, '2023-09-12'),
+
+    -> ('Arjun Mehta', 'Finance', 'Bhopal', 70000, 6, 31, '2021-04-25'),
+
+    -> ('Kavya Joshi', 'Sales', 'Pune', 50000, 2, 23, '2025-01-14'),
+
+    -> ('Vikas Yadav', 'IT', 'Mumbai', 95000, 10, 38, '2020-07-30'),
+
+    -> ('Anjali Rao', 'Finance', 'Bangalore', 60000, 5, 30, '2022-05-17'),
+
+    -> ('Mohit Kumar', 'Sales', 'Indore', 35000, 1, 22, '2026-02-01'),
+
+    -> ('Pooja Shah', 'HR', 'Mumbai', 50000, 4, 28, '2022-10-08'),
+
+    -> ('Karan Malhotra', 'IT', 'Pune', 100000, 9, 36, '2020-12-19'),
+
+    -> ('Simran Kaur', 'Sales', 'Bhopal', 55000, 3, 25, '2024-07-22'),
+
+    -> ('Aditya Mishra', 'Finance', 'Indore', 30000, 1, 23, '2026-06-11');
+
+Query OK, 15 rows affected (0.01 sec)
+
+Records: 15  Duplicates: 0  Warnings: 0
+
+Write SQL queries to find:
+
+=============================
+
+Employees whose salary is greater than ₹60,000.
+
+select \* from employees where salary >60000;
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+| employee_id | employee_name  | department | city      | salary | experience | age  | joining_date |
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+|           3 | Rahul Singh    | Finance    | Pune      |  65000 |          5 |   29 | 2021-08-20   |
+
+|           5 | Rohit Jain     | IT         | Bangalore |  80000 |          7 |   32 | 2020-02-18   |
+
+|           7 | Arjun Mehta    | Finance    | Bhopal    |  70000 |          6 |   31 | 2021-04-25   |
+
+|           9 | Vikas Yadav    | IT         | Mumbai    |  95000 |         10 |   38 | 2020-07-30   |
+
+|          13 | Karan Malhotra | IT         | Pune      | 100000 |          9 |   36 | 2020-12-19   |
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+5 rows in set (0.01 sec)
+
+Employees whose salary is less than ₹50,000.
+
+select \* from employees where salary <50000;
+
++-------------+---------------+------------+--------+--------+------------+------+--------------+
+
+| employee_id | employee_name | department | city   | salary | experience | age  | joining_date |
+
++-------------+---------------+------------+--------+--------+------------+------+--------------+
+
+|           2 | Priya Verma   | HR         | Bhopal |  40000 |          2 |   24 | 2024-03-10   |
+
+|           6 | Sneha Gupta   | HR         | Indore |  45000 |          3 |   26 | 2023-09-12   |
+
+|          11 | Mohit Kumar   | Sales      | Indore |  35000 |          1 |   22 | 2026-02-01   |
+
+|          15 | Aditya Mishra | Finance    | Indore |  30000 |          1 |   23 | 2026-06-11   |
+
++-------------+---------------+------------+--------+--------+------------+------+--------------+
+
+4 rows in set (0.00 sec)
+
+Employees whose age is greater than 30.
+
+ select \* from employees where age >30;
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+| employee_id | employee_name  | department | city      | salary | experience | age  | joining_date |
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+|           5 | Rohit Jain     | IT         | Bangalore |  80000 |          7 |   32 | 2020-02-18   |
+
+|           7 | Arjun Mehta    | Finance    | Bhopal    |  70000 |          6 |   31 | 2021-04-25   |
+
+|           9 | Vikas Yadav    | IT         | Mumbai    |  95000 |         10 |   38 | 2020-07-30   |
+
+|          13 | Karan Malhotra | IT         | Pune      | 100000 |          9 |   36 | 2020-12-19   |
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+4 rows in set (0.00 sec)
+
+Employees whose experience is greater than or equal to 5 years.
+
+ select \* from employees where experience>=5;
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+| employee_id | employee_name  | department | city      | salary | experience | age  | joining_date |
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+|           5 | Rohit Jain     | IT         | Bangalore |  80000 |          7 |   32 | 2020-02-18   |
+
+|           7 | Arjun Mehta    | Finance    | Bhopal    |  70000 |          6 |   31 | 2021-04-25   |
+
+|           9 | Vikas Yadav    | IT         | Mumbai    |  95000 |         10 |   38 | 2020-07-30   |
+
+|          13 | Karan Malhotra | IT         | Pune      | 100000 |          9 |   36 | 2020-12-19   |
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+4 rows in set (0.00 sec)
+
+Employees working in IT or Finance.
+
+ select \* from employees where department in ("it","finance");
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+| employee_id | employee_name  | department | city      | salary | experience | age  | joining_date |
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+|           1 | Aman Sharma    | IT         | Indore    |  50000 |          3 |   25 | 2023-06-15   |
+
+|           3 | Rahul Singh    | Finance    | Pune      |  65000 |          5 |   29 | 2021-08-20   |
+
+|           5 | Rohit Jain     | IT         | Bangalore |  80000 |          7 |   32 | 2020-02-18   |
+
+|           7 | Arjun Mehta    | Finance    | Bhopal    |  70000 |          6 |   31 | 2021-04-25   |
+
+|           9 | Vikas Yadav    | IT         | Mumbai    |  95000 |         10 |   38 | 2020-07-30   |
+
+|          10 | Anjali Rao     | Finance    | Bangalore |  60000 |          5 |   30 | 2022-05-17   |
+
+|          13 | Karan Malhotra | IT         | Pune      | 100000 |          9 |   36 | 2020-12-19   |
+
+|          15 | Aditya Mishra  | Finance    | Indore    |  30000 |          1 |   23 | 2026-06-11   |
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+8 rows in set (0.00 sec)
+
+Employees working in IT, HR, or Sales.
+
+select \* from employees where department in ("it","hr","sales") ;
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+| employee_id | employee_name  | department | city      | salary | experience | age  | joining_date |
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+|           1 | Aman Sharma    | IT         | Indore    |  50000 |          3 |   25 | 2023-06-15   |
+
+|           3 | Rahul Singh    | Finance    | Pune      |  65000 |          5 |   29 | 2021-08-20   |
+
+|           4 | Neha Patel     | Sales      | Mumbai    |  55000 |          4 |   27 | 2022-11-05   |
+
+|           5 | Rohit Jain     | IT         | Bangalore |  80000 |          7 |   32 | 2020-02-18   |
+
+|           7 | Arjun Mehta    | Finance    | Bhopal    |  70000 |          6 |   31 | 2021-04-25   |
+
+|           8 | Kavya Joshi    | Sales      | Pune      |  50000 |          2 |   23 | 2025-01-14   |
+
+|           9 | Vikas Yadav    | IT         | Mumbai    |  95000 |         10 |   38 | 2020-07-30   |
+
+|          10 | Anjali Rao     | Finance    | Bangalore |  60000 |          5 |   30 | 2022-05-17   |
+
+|          11 | Mohit Kumar    | Sales      | Indore    |  35000 |          1 |   22 | 2026-02-01   |
+
+|          13 | Karan Malhotra | IT         | Pune      | 100000 |          9 |   36 | 2020-12-19   |
+
+|          14 | Simran Kaur    | Sales      | Bhopal    |  55000 |          3 |   25 | 2024-07-22   |
+
+|          15 | Aditya Mishra  | Finance    | Indore    |  30000 |          1 |   23 | 2026-06-11   |
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+12 rows in set (0.00 sec)
+
+Employees not working in IT or HR.
+
+ select \* from employees where department not in ("it","hr");
+
++-------------+---------------+------------+--------+--------+------------+------+--------------+
+
+| employee_id | employee_name | department | city   | salary | experience | age  | joining_date |
+
++-------------+---------------+------------+--------+--------+------------+------+--------------+
+
+|           2 | Priya Verma   | HR         | Bhopal |  40000 |          2 |   24 | 2024-03-10   |
+
+|           4 | Neha Patel    | Sales      | Mumbai |  55000 |          4 |   27 | 2022-11-05   |
+
+|           6 | Sneha Gupta   | HR         | Indore |  45000 |          3 |   26 | 2023-09-12   |
+
+|           8 | Kavya Joshi   | Sales      | Pune   |  50000 |          2 |   23 | 2025-01-14   |
+
+|          11 | Mohit Kumar   | Sales      | Indore |  35000 |          1 |   22 | 2026-02-01   |
+
+|          12 | Pooja Shah    | HR         | Mumbai |  50000 |          4 |   28 | 2022-10-08   |
+
+|          14 | Simran Kaur   | Sales      | Bhopal |  55000 |          3 |   25 | 2024-07-22   |
+
++-------------+---------------+------------+--------+--------+------------+------+--------------+
+
+7 rows in set (0.00 sec)
+
+Employees from Indore or Pune.
+
+select \* from employees where city in ("indore","pune");
+
++-------------+----------------+------------+--------+--------+------------+------+--------------+
+
+| employee_id | employee_name  | department | city   | salary | experience | age  | joining_date |
+
++-------------+----------------+------------+--------+--------+------------+------+--------------+
+
+|           1 | Aman Sharma    | IT         | Indore |  50000 |          3 |   25 | 2023-06-15   |
+
+|           3 | Rahul Singh    | Finance    | Pune   |  65000 |          5 |   29 | 2021-08-20   |
+
+|           6 | Sneha Gupta    | HR         | Indore |  45000 |          3 |   26 | 2023-09-12   |
+
+|           8 | Kavya Joshi    | Sales      | Pune   |  50000 |          2 |   23 | 2025-01-14   |
+
+|          11 | Mohit Kumar    | Sales      | Indore |  35000 |          1 |   22 | 2026-02-01   |
+
+|          13 | Karan Malhotra | IT         | Pune   | 100000 |          9 |   36 | 2020-12-19   |
+
+|          15 | Aditya Mishra  | Finance    | Indore |  30000 |          1 |   23 | 2026-06-11   |
+
++-------------+----------------+------------+--------+--------+------------+------+--------------+
+
+7 rows in set (0.00 sec)
+
+Employees who are not from Indore, Mumbai, or Bhopal.
+
+select \* from employees where city not in ("indore","mumbai","bhopal");
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+| employee_id | employee_name  | department | city      | salary | experience | age  | joining_date |
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+|           3 | Rahul Singh    | Finance    | Pune      |  65000 |          5 |   29 | 2021-08-20   |
+
+|           5 | Rohit Jain     | IT         | Bangalore |  80000 |          7 |   32 | 2020-02-18   |
+
+|           8 | Kavya Joshi    | Sales      | Pune      |  50000 |          2 |   23 | 2025-01-14   |
+
+|          10 | Anjali Rao     | Finance    | Bangalore |  60000 |          5 |   30 | 2022-05-17   |
+
+|          13 | Karan Malhotra | IT         | Pune      | 100000 |          9 |   36 | 2020-12-19   |
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+5 rows in set (0.00 sec)
+
+Employees whose salary is between ₹40,000 and ₹70,000.
+
+ select \* from employees where salary between 40000 and 70000;
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+| employee_id | employee_name | department | city      | salary | experience | age  | joining_date |
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+|           1 | Aman Sharma   | IT         | Indore    |  50000 |          3 |   25 | 2023-06-15   |
+
+|           2 | Priya Verma   | HR         | Bhopal    |  40000 |          2 |   24 | 2024-03-10   |
+
+|           3 | Rahul Singh   | Finance    | Pune      |  65000 |          5 |   29 | 2021-08-20   |
+
+|           4 | Neha Patel    | Sales      | Mumbai    |  55000 |          4 |   27 | 2022-11-05   |
+
+|           6 | Sneha Gupta   | HR         | Indore    |  45000 |          3 |   26 | 2023-09-12   |
+
+|           7 | Arjun Mehta   | Finance    | Bhopal    |  70000 |          6 |   31 | 2021-04-25   |
+
+|           8 | Kavya Joshi   | Sales      | Pune      |  50000 |          2 |   23 | 2025-01-14   |
+
+|          10 | Anjali Rao    | Finance    | Bangalore |  60000 |          5 |   30 | 2022-05-17   |
+
+|          12 | Pooja Shah    | HR         | Mumbai    |  50000 |          4 |   28 | 2022-10-08   |
+
+|          14 | Simran Kaur   | Sales      | Bhopal    |  55000 |          3 |   25 | 2024-07-22   |
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+10 rows in set (0.00 sec)
+
+Employees whose age is between 25 and 35.
+
+ select \* from employees where age between 25 and 35;
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+| employee_id | employee_name | department | city      | salary | experience | age  | joining_date |
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+|           1 | Aman Sharma   | IT         | Indore    |  50000 |          3 |   25 | 2023-06-15   |
+
+|           3 | Rahul Singh   | Finance    | Pune      |  65000 |          5 |   29 | 2021-08-20   |
+
+|           4 | Neha Patel    | Sales      | Mumbai    |  55000 |          4 |   27 | 2022-11-05   |
+
+|           5 | Rohit Jain    | IT         | Bangalore |  80000 |          7 |   32 | 2020-02-18   |
+
+|           6 | Sneha Gupta   | HR         | Indore    |  45000 |          3 |   26 | 2023-09-12   |
+
+|           7 | Arjun Mehta   | Finance    | Bhopal    |  70000 |          6 |   31 | 2021-04-25   |
+
+|          10 | Anjali Rao    | Finance    | Bangalore |  60000 |          5 |   30 | 2022-05-17   |
+
+|          12 | Pooja Shah    | HR         | Mumbai    |  50000 |          4 |   28 | 2022-10-08   |
+
+|          14 | Simran Kaur   | Sales      | Bhopal    |  55000 |          3 |   25 | 2024-07-22   |
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+9 rows in set (0.00 sec)
+
+Employees whose experience is between 3 and 7 years.
+
+ select \* from employees where experience between 3 and 7;
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+| employee_id | employee_name | department | city      | salary | experience | age  | joining_date |
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+|           1 | Aman Sharma   | IT         | Indore    |  50000 |          3 |   25 | 2023-06-15   |
+
+|           3 | Rahul Singh   | Finance    | Pune      |  65000 |          5 |   29 | 2021-08-20   |
+
+|           4 | Neha Patel    | Sales      | Mumbai    |  55000 |          4 |   27 | 2022-11-05   |
+
+|           5 | Rohit Jain    | IT         | Bangalore |  80000 |          7 |   32 | 2020-02-18   |
+
+|           6 | Sneha Gupta   | HR         | Indore    |  45000 |          3 |   26 | 2023-09-12   |
+
+|           7 | Arjun Mehta   | Finance    | Bhopal    |  70000 |          6 |   31 | 2021-04-25   |
+
+|          10 | Anjali Rao    | Finance    | Bangalore |  60000 |          5 |   30 | 2022-05-17   |
+
+|          12 | Pooja Shah    | HR         | Mumbai    |  50000 |          4 |   28 | 2022-10-08   |
+
+|          14 | Simran Kaur   | Sales      | Bhopal    |  55000 |          3 |   25 | 2024-07-22   |
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+9 rows in set (0.00 sec)
+
+Employees who joined between 2022 and 2025.
+
+select \* from employees where joining_date between "2022-01-01" and "2025-12-31";
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+| employee_id | employee_name | department | city      | salary | experience | age  | joining_date |
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+|           1 | Aman Sharma   | IT         | Indore    |  50000 |          3 |   25 | 2023-06-15   |
+
+|           2 | Priya Verma   | HR         | Bhopal    |  40000 |          2 |   24 | 2024-03-10   |
+
+|           4 | Neha Patel    | Sales      | Mumbai    |  55000 |          4 |   27 | 2022-11-05   |
+
+|           6 | Sneha Gupta   | HR         | Indore    |  45000 |          3 |   26 | 2023-09-12   |
+
+|           8 | Kavya Joshi   | Sales      | Pune      |  50000 |          2 |   23 | 2025-01-14   |
+
+|          10 | Anjali Rao    | Finance    | Bangalore |  60000 |          5 |   30 | 2022-05-17   |
+
+|          12 | Pooja Shah    | HR         | Mumbai    |  50000 |          4 |   28 | 2022-10-08   |
+
+|          14 | Simran Kaur   | Sales      | Bhopal    |  55000 |          3 |   25 | 2024-07-22   |
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+8 rows in set (0.00 sec)
+
+Employees who joined before 2023.
+
+select \* from employees where joining_date <"2023-01-01";
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+| employee_id | employee_name  | department | city      | salary | experience | age  | joining_date |
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+|           3 | Rahul Singh    | Finance    | Pune      |  65000 |          5 |   29 | 2021-08-20   |
+
+|           4 | Neha Patel     | Sales      | Mumbai    |  55000 |          4 |   27 | 2022-11-05   |
+
+|           5 | Rohit Jain     | IT         | Bangalore |  80000 |          7 |   32 | 2020-02-18   |
+
+|           7 | Arjun Mehta    | Finance    | Bhopal    |  70000 |          6 |   31 | 2021-04-25   |
+
+|           9 | Vikas Yadav    | IT         | Mumbai    |  95000 |         10 |   38 | 2020-07-30   |
+
+|          10 | Anjali Rao     | Finance    | Bangalore |  60000 |          5 |   30 | 2022-05-17   |
+
+|          12 | Pooja Shah     | HR         | Mumbai    |  50000 |          4 |   28 | 2022-10-08   |
+
+|          13 | Karan Malhotra | IT         | Pune      | 100000 |          9 |   36 | 2020-12-19   |
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+8 rows in set (0.00 sec)
+
+Employees who joined after 2024.
+
+select \* from employees where joining_date >"2024-01-01";
+
++-------------+---------------+------------+--------+--------+------------+------+--------------+
+
+| employee_id | employee_name | department | city   | salary | experience | age  | joining_date |
+
++-------------+---------------+------------+--------+--------+------------+------+--------------+
+
+|           2 | Priya Verma   | HR         | Bhopal |  40000 |          2 |   24 | 2024-03-10   |
+
+|           8 | Kavya Joshi   | Sales      | Pune   |  50000 |          2 |   23 | 2025-01-14   |
+
+|          11 | Mohit Kumar   | Sales      | Indore |  35000 |          1 |   22 | 2026-02-01   |
+
+|          14 | Simran Kaur   | Sales      | Bhopal |  55000 |          3 |   25 | 2024-07-22   |
+
+|          15 | Aditya Mishra | Finance    | Indore |  30000 |          1 |   23 | 2026-06-11   |
+
++-------------+---------------+------------+--------+--------+------------+------+--------------+
+
+5 rows in set (0.00 sec)
+
+Employees from Indore AND working in IT.
+
+ select \* from employees where city="indore" and department="it";
+
++-------------+---------------+------------+--------+--------+------------+------+--------------+
+
+| employee_id | employee_name | department | city   | salary | experience | age  | joining_date |
+
++-------------+---------------+------------+--------+--------+------------+------+--------------+
+
+|           1 | Aman Sharma   | IT         | Indore |  50000 |          3 |   25 | 2023-06-15   |
+
++-------------+---------------+------------+--------+--------+------------+------+--------------+
+
+1 row in set (0.00 sec)
+
+Employees working in IT AND having salary greater than ₹70,000.
+
+ select \* from employees where department="it" and salary >70000;
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+| employee_id | employee_name  | department | city      | salary | experience | age  | joining_date |
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+|           5 | Rohit Jain     | IT         | Bangalore |  80000 |          7 |   32 | 2020-02-18   |
+
+|           9 | Vikas Yadav    | IT         | Mumbai    |  95000 |         10 |   38 | 2020-07-30   |
+
+|          13 | Karan Malhotra | IT         | Pune      | 100000 |          9 |   36 | 2020-12-19   |
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+3 rows in set (0.00 sec)
+
+Employees whose salary is between ₹50,000 and ₹90,000 AND experience is greater than 4 years.
+
+select \* from employees where salary between 50000 and 90000 and experience >4;
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+| employee_id | employee_name | department | city      | salary | experience | age  | joining_date |
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+|           3 | Rahul Singh   | Finance    | Pune      |  65000 |          5 |   29 | 2021-08-20   |
+
+|           5 | Rohit Jain    | IT         | Bangalore |  80000 |          7 |   32 | 2020-02-18   |
+
+|           7 | Arjun Mehta   | Finance    | Bhopal    |  70000 |          6 |   31 | 2021-04-25   |
+
+|          10 | Anjali Rao    | Finance    | Bangalore |  60000 |          5 |   30 | 2022-05-17   |
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+4 rows in set (0.00 sec)
+
+Employees working in IT or Finance AND salary greater than ₹60,000.
+
+select \* from employees where department in("it","finance") and salary >60000;
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+| employee_id | employee_name  | department | city      | salary | experience | age  | joining_date |
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+|           3 | Rahul Singh    | Finance    | Pune      |  65000 |          5 |   29 | 2021-08-20   |
+
+|           5 | Rohit Jain     | IT         | Bangalore |  80000 |          7 |   32 | 2020-02-18   |
+
+|           7 | Arjun Mehta    | Finance    | Bhopal    |  70000 |          6 |   31 | 2021-04-25   |
+
+|           9 | Vikas Yadav    | IT         | Mumbai    |  95000 |         10 |   38 | 2020-07-30   |
+
+|          13 | Karan Malhotra | IT         | Pune      | 100000 |          9 |   36 | 2020-12-19   |
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+5 rows in set (0.00 sec)
+
+Employees whose joining date is between 2021 and 2024 AND salary is greater than ₹50,000.
+
+select \* from employees where joining_date between "2021-01-01" and "2024-12-31" and salary > 50000;
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+| employee_id | employee_name | department | city      | salary | experience | age  | joining_date |
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+|           3 | Rahul Singh   | Finance    | Pune      |  65000 |          5 |   29 | 2021-08-20   |
+
+|           4 | Neha Patel    | Sales      | Mumbai    |  55000 |          4 |   27 | 2022-11-05   |
+
+|           7 | Arjun Mehta   | Finance    | Bhopal    |  70000 |          6 |   31 | 2021-04-25   |
+
+|          10 | Anjali Rao    | Finance    | Bangalore |  60000 |          5 |   30 | 2022-05-17   |
+
+|          14 | Simran Kaur   | Sales      | Bhopal    |  55000 |          3 |   25 | 2024-07-22   |
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+5 rows in set (0.00 sec)
+
+Employees whose salary is not between ₹40,000 and ₹70,000.
+
+ select \* from employees where salary not between 40000 and 70000;
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+| employee_id | employee_name  | department | city      | salary | experience | age  | joining_date |
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+|           5 | Rohit Jain     | IT         | Bangalore |  80000 |          7 |   32 | 2020-02-18   |
+
+|           9 | Vikas Yadav    | IT         | Mumbai    |  95000 |         10 |   38 | 2020-07-30   |
+
+|          11 | Mohit Kumar    | Sales      | Indore    |  35000 |          1 |   22 | 2026-02-01   |
+
+|          13 | Karan Malhotra | IT         | Pune      | 100000 |          9 |   36 | 2020-12-19   |
+
+|          15 | Aditya Mishra  | Finance    | Indore    |  30000 |          1 |   23 | 2026-06-11   |
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+5 rows in set (0.00 sec)
+
+Employees whose department is not IT, HR, or Sales.
+
+select \* from employees where department not in ("it","hr","sales") ;
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+| employee_id | employee_name | department | city      | salary | experience | age  | joining_date |
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+|           3 | Rahul Singh   | Finance    | Pune      |  65000 |          5 |   29 | 2021-08-20   |
+
+|           7 | Arjun Mehta   | Finance    | Bhopal    |  70000 |          6 |   31 | 2021-04-25   |
+
+|          10 | Anjali Rao    | Finance    | Bangalore |  60000 |          5 |   30 | 2022-05-17   |
+
+|          15 | Aditya Mishra | Finance    | Indore    |  30000 |          1 |   23 | 2026-06-11   |
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+4 rows in set (0.00 sec)
+
+Employees whose joining date is not between 2022 and 2025.
+
+select \* from employees where joining_date not between "2022-01-01" and "2025-12-31" ;
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+| employee_id | employee_name  | department | city      | salary | experience | age  | joining_date |
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+|           3 | Rahul Singh    | Finance    | Pune      |  65000 |          5 |   29 | 2021-08-20   |
+
+|           5 | Rohit Jain     | IT         | Bangalore |  80000 |          7 |   32 | 2020-02-18   |
+
+|           7 | Arjun Mehta    | Finance    | Bhopal    |  70000 |          6 |   31 | 2021-04-25   |
+
+|           9 | Vikas Yadav    | IT         | Mumbai    |  95000 |         10 |   38 | 2020-07-30   |
+
+|          11 | Mohit Kumar    | Sales      | Indore    |  35000 |          1 |   22 | 2026-02-01   |
+
+|          13 | Karan Malhotra | IT         | Pune      | 100000 |          9 |   36 | 2020-12-19   |
+
+|          15 | Aditya Mishra  | Finance    | Indore    |  30000 |          1 |   23 | 2026-06-11   |
+
++-------------+----------------+------------+-----------+--------+------------+------+--------------+
+
+7 rows in set (0.00 sec)
+
+Employees from Indore or Pune, whose salary is between ₹45,000 and ₹80,000, and whose experience is more than 3 years.
+
+select \* from employees where city in ("indore","pune") and salary between 45000 and 80000 and experience >3;
+
++-------------+---------------+------------+------+--------+------------+------+--------------+
+
+| employee_id | employee_name | department | city | salary | experience | age  | joining_date |
+
++-------------+---------------+------------+------+--------+------------+------+--------------+
+
+|           3 | Rahul Singh   | Finance    | Pune |  65000 |          5 |   29 | 2021-08-20   |
+
++-------------+---------------+------------+------+--------+------------+------+--------------+
+
+1 row in set (0.00 sec)
+
+Employees who did not join between 2020 and 2023 and whose salary is greater than ₹60,000.
+
+ select \* from employees where joining_date not between "2020-01-01" and "2023-12-31" and salary >60000 ;
+
+Find employees who are from Indore, Pune, or Bangalore, whose salary is between ₹50,000 and ₹90,000, and whose experience is at least 4 years.
+
+select \* from employees where city in ("indore","pune","Bangalore") and salary between 50000 and 90000 and experience >4;
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+| employee_id | employee_name | department | city      | salary | experience | age  | joining_date |
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+|           3 | Rahul Singh   | Finance    | Pune      |  65000 |          5 |   29 | 2021-08-20   |
+
+|           5 | Rohit Jain    | IT         | Bangalore |  80000 |          7 |   32 | 2020-02-18   |
+
+|          10 | Anjali Rao    | Finance    | Bangalore |  60000 |          5 |   30 | 2022-05-17   |
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+3 rows in set (0.00 sec)
+
+Find employees who are not from Bhopal or Mumbai, are not working in HR, and joined between 2021 and 2025.
+
+ select \* from employees where joining_date  between "2021-01-01" and "2025-12-31" and department !="hr" and city not in("bhopal","mumbai") ;
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+| employee_id | employee_name | department | city      | salary | experience | age  | joining_date |
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+|           1 | Aman Sharma   | IT         | Indore    |  50000 |          3 |   25 | 2023-06-15   |
+
+|           3 | Rahul Singh   | Finance    | Pune      |  65000 |          5 |   29 | 2021-08-20   |
+
+|           8 | Kavya Joshi   | Sales      | Pune      |  50000 |          2 |   23 | 2025-01-14   |
+
+|          10 | Anjali Rao    | Finance    | Bangalore |  60000 |          5 |   30 | 2022-05-17   |
+
++-------------+---------------
+
+Find employees working in IT or Finance, whose salary is greater than ₹60,000, whose age is between 25 and 35, and who joined after 2022.
+
+ select \* from employees where joining_date > "2020-12-31" and age between 25 and 35 and salary > 60000 and department in ("it" ,"finance")  ;
+
++-------------+---------------+------------+--------+--------+------------+------+--------------+
+
+| employee_id | employee_name | department | city   | salary | experience | age  | joining_date |
+
++-------------+---------------+------------+--------+--------+------------+------+--------------+
+
+|           3 | Rahul Singh   | Finance    | Pune   |  65000 |          5 |   29 | 2021-08-20   |
+
+|           7 | Arjun Mehta   | Finance    | Bhopal |  70000 |          6 |   31 | 2021-04-25   |
+
++-------------+---------------+------------+--------+--------+------------+------+--------------+
+
+2 rows in set (0.00 sec)
+
+Find employees whose salary is NOT between ₹40,000 and ₹75,000, whose experience is between 2 and 8 years, and who are not working in Sales.
+
+ select \* from employees where salary not between 40000 and 70000 and experience between 2 and 8 and department not in ("sales")  ;
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+| employee_id | employee_name | department | city      | salary | experience | age  | joining_date |
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+|           5 | Rohit Jain    | IT         | Bangalore |  80000 |          7 |   32 | 2020-02-18   |
+
++-------------+---------------+------------+-----------+--------+------------+------+--------------+
+
+1 row in set (0.00 sec)
+
+Find employees who are from Indore or Pune, working in IT, Finance, or HR, with salary between ₹45,000 and ₹85,000, and who joined between 2020 and 2024.
+
+select \* from employees where city in ("indore","pune") and salary between 45000 and 85000 and department in ("it","finance","hr") and joining_date between "2020-01-01" and "2024-12-31"  ;
+
++-------------+---------------+------------+--------+--------+------------+------+--------------+
+
+| employee_id | employee_name | department | city   | salary | experience | age  | joining_date |
+
++-------------+---------------+------------+--------+--------+------------+------+--------------+
+
+|           1 | Aman Sharma   | IT         | Indore |  50000 |          3 |   25 | 2023-06-15   |
+
+|           3 | Rahul Singh   | Finance    | Pune   |  65000 |          5 |   29 | 2021-08-20   |
+
+|           6 | Sneha Gupta   | HR         | Indore |  45000 |          3 |   26 | 2023-09-12   |
+
++-------------+---------------+------------+--------+--------+------------+------+--------------+
+
+3 rows in set (0.00 sec)
+

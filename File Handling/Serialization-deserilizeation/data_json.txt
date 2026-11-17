@@ -1,0 +1,5 @@
+{
+    "Name": "Kunal",
+    "Age": 21,
+    "Is_Active": true
+}

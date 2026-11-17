@@ -1,0 +1,217 @@
+# Assignment 6 — Employee Management System
+
+**Use the `employees` table and sample data given below.**
+
+## Table Structure
+
+Create an `employees` table with the following columns:
+
+* `employee_id`
+* `employee_name`
+* `department`
+* `city`
+* `salary`
+* `joining_date`
+* `experience`
+* `age`
+* `gender`
+* `employment_type`
+* `skills`
+
+mysql> create table if not exists employee_1(employee_id int,employee_name varchar(50),department varchar(20),city varchar(20),salary decimal(10,2),joining_date date,experience int,age int,gender enum("Male","Female"),employment_type enum("full time","part time","contract","intern"),skills set("java","python","react","angular","c++"));
+Query OK, 0 rows affected (0.08 sec)
+
+
+* `email`
+* `manager_id`
+
+mysql> alter table employee_1 add column email varchar(20),add column manager_id int;
+
+### Data Type Requirements
+
+Use:
+
+* `ENUM` for `gender`
+* `ENUM` for `employment_type`
+* `SET` for `skills`
+* `DATE` for `joining_date`
+* `DATE` for any other date column if required
+* Allow appropriate columns such as `email` and `manager_id` to contain `NULL`
+
+Insert **at least 10 employees** with different values.
+
+ INSERT INTO employee_1
+    -> (employee_id, employee_name, department, city, salary, joining_date,
+    ->  experience, age, gender, employment_type, skills, email, manager_id)
+    -> VALUES
+    -> (1, 'Rahul Sharma', 'IT', 'Indore', 45000.00, '2022-01-15', 4, 28,
+    ->  'Male', 'full time', 'java,python', 'rahul@gmail.com', NULL),
+    ->
+    -> (2, 'Priya Verma', 'HR', 'Bhopal', 38000.00, '2021-06-10', 5, 30,
+    ->  'Female', 'full time', 'python,react', 'priya@gmail.com', 1),
+    ->
+    -> (3, 'Amit Patel', 'Finance', 'Mumbai', 52000.00, '2020-03-20', 6, 32,
+    ->  'Male', 'full time', 'java,c++', 'amit@gmail.com', 1),
+    ->
+    -> (4, 'Sneha Gupta', 'IT', 'Pune', 60000.00, '2019-11-05', 7, 31,
+    ->  'Female', 'full time', 'java,react,angular', 'sneha@gmail.com', 1),
+    ->
+    -> (5, 'Vikas Singh', 'Marketing', 'Delhi', 35000.00, '2023-02-12', 2, 25,
+    ->  'Male', 'part time', 'python', 'vikas@gmail.com', 2),
+    ->
+    -> (6, 'Anjali Jain', 'IT', 'Indore', 42000.00, '2022-08-18', 3, 27,
+    ->  'Female', 'contract', 'react,angular', 'anjali@gmail.com', 4),
+    ->
+    -> (7, 'Rohit Yadav', 'Sales', 'Jaipur', 30000.00, '2024-01-08', 1, 24,
+    ->  'Male', 'full time', 'java', 'rohit@gmail.com', 2),
+    ->
+    -> (8, 'Neha Joshi', 'IT', 'Bangalore', 70000.00, '2018-07-23', 8, 34,
+    ->  'Female', 'full time', 'java,python,react', 'neha@gmail.com', NULL),
+    ->
+    -> (9, 'Karan Mehta', 'Support', 'Ahmedabad', 28000.00, '2023-09-14', 2, 26,
+    ->  'Male', 'contract', 'c++', NULL, 3),
+    ->
+    -> (10, 'Pooja Mishra', 'HR', 'Indore', 40000.00, '2021-12-01', 4, 29,
+    ->  'Female', 'full time', 'python,angular', 'pooja@gmail.com', 2),
+    ->
+    -> (11, 'Arjun Das', 'IT', 'Hyderabad', 55000.00, '2020-05-17', 5, 30,
+    ->  'Male', 'full time', 'java,angular', 'arjun@gmail.com', 4),
+    ->
+    -> (12, 'Kavya Nair', 'Design', 'Chennai', 32000.00, '2024-06-03', 1, 23,
+    ->  'Female', 'intern', 'react', 'kavya@gmail.com', NULL),
+    ->
+    -> (13, 'Suresh Kumar', 'Finance', 'Bhopal', 48000.00, '2019-04-22', 7, 35,
+    ->  'Male', 'full time', 'python,c++', 'suresh@gmail.com', 3),
+    ->
+    -> (14, 'Divya Shah', 'IT', 'Pune', 65000.00, '2021-10-11', 5, 29,
+    ->  'Female', 'contract', 'java,python,angular', 'divya@gmail.com', 4),
+    ->
+    -> (15, 'Manish Tiwari', 'Marketing', 'Delhi', 36000.00, '2023-07-19', 2, 26,
+    ->  'Male', 'part time', 'react,c++', 'manish@gmail.com', 2);
+
+Your data must include:
+
+* At least SOME different departments
+* At least SOME different cities
+* Some employees with `NULL` email
+* Some employees with `NULL` manager_id
+* Different employment types such as `FULL_TIME`, `PART_TIME`, `CONTRACT`, `INTERN`
+* Different combinations of skills using `SET`
+* Employees who joined before 2022
+* Employees who joined between 2022 and 2024
+* Employees who joined after 2024
+* Different salary ranges
+* Different experience levels
+* Both male and female employees
+
+---
+
+## Write SQL queries for the following questions:
+
+Find employees from IT, Finance, or HR who joined after '2023-01-01', have salary between ₹40,000 and ₹90,000, and have experience greater than 3 years.
+
+select * from employee_1 where department in('it','hr','finance') and joining_date>'2023-01-01' and salary between 40000 and 90000 and experience>3;
+
+
+
+2. Find employees whose email is NULL, salary is greater than ₹50,000, and joining date is after '2022-01-01'.
+
+select * from employee_1 where department in('it','hr','finance') and joining_date>'2023-01-01' and salary between 40000 and 90000 and experience>3;
+
+
+3. Find employees whose manager_id is NOT NULL, department is not HR, and salary is either below ₹40,000 or above ₹80,000.
+
+select * from employee_1 where manager_id is null and department not in ("hr") and (salary<40000 or salary>80000);
+
+
+4. Find employees from Indore, Pune, or Delhi who joined between '2022-01-01' and '2025-12-31', have salary greater than ₹45,000, and experience of at least 3 years.
+
+select * from employee_1 where city in ("indore","pune","delhi") and (joining_date between "2022-01-01" and "2025-12-31") and salary > 45000 and experience >=3;
+
+
+5. Find employees who are FULL_TIME, have JAVA or PYTHON in their skills, salary greater than ₹50,000, and email is NOT NULL.
+
+select * from employee_1 where skills in("java","python") and salary>50000 and email is not null and employment_type = "full time";
+
+
+Find employees whose name starts with A or S, joining date is after '2023-01-01', salary is between ₹30,000 and ₹80,000, and age is between 25 and 35.
+
+select * from employee_1 where (employee_name like "a%" or employee_name like "s%") and joining_date>"2023-01-01" and (salary between 30000 and 80000) and (age between 25 and 55);
+
+
+Find employees who belong to IT or Finance, have JAVA in skills, experience greater than 4 years, and salary is NOT between ₹50,000 and ₹80,000.
+
+
+Find employees whose department is IT, HR, or Marketing, city is not Mumbai, salary is greater than ₹40,000, and either email is NULL or manager_id is NULL.
+
+
+Find employees who joined after '2022-01-01', are not INTERN, have salary greater than ₹45,000, and have either SQL or PYTHON in their skills.
+
+
+Find employees whose salary is greater than ₹60,000 OR experience is greater than 7 years, but exclude employees from Mumbai and Bhopal.
+
+
+Find employees who joined between '2023-01-01' and '2026-12-31', belong to Electronics-related departments? Instead, use: departments IT or Development, salary greater than ₹50,000, and email is NOT NULL.
+
+
+Find employees whose name contains the letter a, department is not HR, salary is between ₹35,000 and ₹75,000, and joining date is after '2022-06-01'.
+
+
+Find employees who have both JAVA and SQL skills, salary greater than ₹55,000, experience greater than 3 years, and manager_id is NOT NULL.
+
+
+Find employees who have PYTHON or REACT skills, belong to IT or Development, joined after '2023-01-01', and salary is greater than ₹50,000.
+
+
+Find employees whose employment type is CONTRACT or PART_TIME, salary is greater than ₹35,000, joining date is between '2022-01-01' and '2025-12-31', and email is NOT NULL.
+
+
+Find employees whose gender is FEMALE, department is IT or Finance, salary is greater than ₹45,000, and experience is greater than 2 years.
+
+
+Find employees whose city is Indore, Pune, or Delhi, department is not HR, joining date is after '2023-01-01', salary is between ₹40,000 and ₹1,00,000, and manager_id is NOT NULL.
+
+
+Find employees whose salary is NOT between ₹30,000 and ₹60,000, experience is greater than 5 years, and either department is IT or Finance.
+
+
+Find employees whose email is NULL OR manager_id is NULL, but salary must be greater than ₹40,000 and joining date must be after '2022-01-01'.
+
+
+Find employees whose name starts with S OR contains a, department is IT or Finance, salary is between ₹40,000 and ₹90,000, and experience is at least 3 years.
+
+
+Find employees who joined between '2022-01-01' and '2025-12-31', are not from Mumbai or Bhopal, salary is greater than ₹50,000, and have JAVA in their skills.
+
+
+Find employees who are FULL_TIME, joined after '2023-01-01', have salary greater than ₹60,000, and have either JAVA + SQL or PYTHON + REACT skills.
+
+
+Find employees from IT, Finance, or Development whose salary is between ₹45,000 and ₹90,000, experience is greater than 3 years, email is NOT NULL, and manager_id is NOT NULL.
+
+
+Find employees whose joining date is after '2023-01-01', department is not HR, salary is greater than ₹50,000 OR experience is greater than 6 years, and city is not Mumbai.
+
+
+Find employees whose name starts with A or M, gender is FEMALE, employment type is FULL_TIME, salary is greater than ₹45,000, and email is NOT NULL.
+
+
+Find employees who have JAVA or SPRING in their skills, joined after '2022-01-01', salary is NOT between ₹40,000 and ₹70,000, and manager_id is NOT NULL.
+
+
+
+Find employees from Indore, Pune, or Delhi whose joining date is between '2023-01-01' and '2026-12-31', salary is between ₹40,000 and ₹1,00,000, experience is greater than 2 years, and either email or manager_id is NULL.
+
+
+
+Find employees belonging to IT or Development, whose name contains a, skills contain JAVA or PYTHON, salary is greater than ₹50,000, joining date is after '2023-01-01', and email is NOT NULL.
+
+
+
+Find employees whose department is IT, Finance, or Development, city is not Mumbai or Bhopal, salary is between ₹40,000 and ₹90,000, experience is greater than 3 years, skills contain SQL, and manager_id is NOT NULL. Display the result ordered by salary in descending order.
+
+
+
+Find employees whose name starts with S OR contains a, department is IT or Finance, joining date is between '2023-01-01' and '2026-12-31', salary is between ₹40,000 and ₹1,00,000, experience is greater than 2 years, email is NOT NULL, manager_id is NOT NULL, skills contain JAVA or PYTHON, and city is Indore, Pune, or Delhi. Display the result first by department ascending and then by salary descending.
+
+

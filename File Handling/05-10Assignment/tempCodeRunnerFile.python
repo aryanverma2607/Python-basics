@@ -1,0 +1,80 @@
+try:
+    f = open("students.txt", "r+")
+    result_file = open("result.txt", "w")
+    error_file = open("error_log.txt", "w")
+
+    for line in f:
+        line = line.strip()
+        data = line.split(",")
+
+        # Check missing fields
+        if len(data) < 4:
+            error_file.write("Error: " + line + " -> Marks are missing\n")
+            continue
+
+        student_id = data[0].strip()
+        name = data[1].strip()
+        subject = data[2].strip()
+        marks = data[3].strip()
+
+        # Check required fields
+        if student_id == "":
+            error_file.write("Error: " + line + " -> Student ID is missing\n")
+            continue
+
+        if name == "":
+            error_file.write("Error: " + line + " -> Student Name is missing\n")
+            continue
+
+        if subject == "":
+            error_file.write("Error: " + line + " -> Subject is missing\n")
+            continue
+
+        if marks == "":
+            error_file.write("Error: " + line + " -> Marks are missing\n")
+            continue
+
+        # Check numeric marks
+        try:
+            marks = int(marks)
+        except ValueError:
+            error_file.write("Error: " + line + " -> Marks must be numeric\n")
+            continue
+
+        # Check range
+        if marks < 0 or marks > 100:
+            error_file.write(
+                "Error: " + line + " -> Marks must be between 0 and 100\n"
+            )
+            continue
+
+        # Calculate result
+        if marks >= 90:
+            result = "Excellent"
+        elif marks >= 75:
+            result = "Very Good"
+        elif marks >= 60:
+            result = "Good"
+        elif marks >= 40:
+            result = "Pass"
+        else:
+            result = "Fail"
+
+        result_file.write(
+            student_id + " - " + name + " - " + subject +
+            " - " + str(marks) + " - " + result + "\n"
+        )
+
+    f.close()
+    result_file.close()
+    error_file.close()
+
+    print("Student result processing completed successfully.")
+    print("Valid records have been written to result.txt")
+    print("Invalid records have been written to error_log.txt")
+
+except FileNotFoundError:
+    print("Error: students.txt file not found.")
+
+
+#select department,avg(salary) from employee group by department having count(*)>=2 and avg(salary)>40000 order by avg(salary) desc;

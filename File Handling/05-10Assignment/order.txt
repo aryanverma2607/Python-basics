@@ -1,0 +1,3 @@
+O101 Rahul Laptop 1 55000
+O102 Priya Mouse 3 800
+O103 Amit Keyboard 2 1500

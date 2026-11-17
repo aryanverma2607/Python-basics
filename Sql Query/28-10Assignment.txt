@@ -1,0 +1,516 @@
+Assignment 1:
+
+Employee Salary Analysis
+Use the following employees table to solve the questions below.
+
+NOTE:-use your friends names in the given table.
+Table: employees
+id name department job_role salary hire_date
+1 Alice HR       Manager       6000.00 2022-01-15
+2 Bob HR Recruiter 4000.00 2023-03-20
+3 Charlie IT Developer 5000.00 2022-07-25
+4 David IT Developer 5500.00 2021-12-05
+5 Eve IT Tester 4500.00 2023-06-10
+6 Frank IT Tester 4800.00 2023-09-12
+7 Grace Finance Analyst 5200.00 2021-11-18
+8 Hank Finance Analyst 5300.00 2022-04-30
+9 Ivy Finance Manager 7000.00 2023-08-14
+10 Jack HR Recruiter 4200.00 2022-10-05
+Questions
+Find the total number of employees in each department.
+
+mysql> select department,count(*) from employees group by department;
+
+Find the average salary of employees in each job role.
+
+mysql> select job_role,avg(salary) from employees group by job_role;
+
+Find the highest salary in the IT department.
+
+mysql> select department,max(salary) from employees where department='it' group by department order by max(salary) desc limit 1;
+
+Find the lowest salary among all employees.
+
+mysql> select min(salary) from employees;
+
+Count the number of employees who joined after January 1, 2023.
+
+mysql> select count(*) from employees where hire_date>"2023-01-01";
+
+Find the total salary paid in each department.
+
+mysql> select department,sum(salary) as totalsalary from employees group by department;
+
+Find the job role that has the highest total salary payout.
+
+mysql> select job_role,max(salary) as highestsalary from employees group by job_role order by max(salary) desc limit 1;
+
+Find the average salary of employees who joined after 2022.
+
+mysql> select avg(salary) from employees where hire_date>"2022-01-01";
+
+Find departments where the total salary exceeds 10,000.
+
+mysql> select department,sum(salary) as total from employees group by department having sum(salary)>10000;
+
+Find the department with the highest number of employees.
+
+mysql> select department,count(*) as totalemployees from employees group by department order by department desc limit 1;
+
+
+
+
+mysql> create table employees(id int primary key,name varchar(20),department varchar(20),job_role varchar(20),salary decimal(6,2),hire_date date);
+ERROR 1046 (3D000): No database selected
+mysql> use assignment28_10;
+Database changed
+mysql> create table employees(id int primary key,name varchar(20),department varchar(20),job_role varchar(20),salary decimal(6,2),hire_date date);
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> insert into employees values
+    -> (1,"Alice","HR","Manager",6000.00,"2022-01-15"),
+    -> (2,"Bob","HR","Recruiter",4000.00,"2023-03-20"),
+    -> (3, 'Charlie', 'IT', 'Developer', 5000.00, '2022-07-25'),
+    -> (4, 'David', 'IT', 'Developer', 5500.00, '2021-12-05'),
+    -> (5, 'Eve', 'IT', 'Tester', 4500.00, '2023-06-10'),
+    -> (6, 'Frank', 'IT', 'Tester', 4800.00, '2023-09-12'),
+    -> (7, 'Grace', 'Finance', 'Analyst', 5200.00, '2021-11-18'),
+    -> (8, 'Hank', 'Finance', 'Analyst', 5300.00, '2022-04-30'),
+    -> (9, 'Ivy', 'Finance', 'Manager', 7000.00, '2023-08-14'),
+    -> (10, 'Jack', 'HR', 'Recruiter', 4200.00, '2022-10-05');
+Query OK, 10 rows affected (0.03 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> select * from employees;
++----+---------+------------+-----------+---------+------------+
+| id | name    | department | job_role  | salary  | hire_date  |
++----+---------+------------+-----------+---------+------------+
+|  1 | Alice   | HR         | Manager   | 6000.00 | 2022-01-15 |
+|  2 | Bob     | HR         | Recruiter | 4000.00 | 2023-03-20 |
+|  3 | Charlie | IT         | Developer | 5000.00 | 2022-07-25 |
+|  4 | David   | IT         | Developer | 5500.00 | 2021-12-05 |
+|  5 | Eve     | IT         | Tester    | 4500.00 | 2023-06-10 |
+|  6 | Frank   | IT         | Tester    | 4800.00 | 2023-09-12 |
+|  7 | Grace   | Finance    | Analyst   | 5200.00 | 2021-11-18 |
+|  8 | Hank    | Finance    | Analyst   | 5300.00 | 2022-04-30 |
+|  9 | Ivy     | Finance    | Manager   | 7000.00 | 2023-08-14 |
+| 10 | Jack    | HR         | Recruiter | 4200.00 | 2022-10-05 |
++----+---------+------------+-----------+---------+------------+
+10 rows in set (0.00 sec)
+
+mysql> select department,count(*) from employees group by department;
++------------+----------+
+| department | count(*) |
++------------+----------+
+| HR         |        3 |
+| IT         |        4 |
+| Finance    |        3 |
++------------+----------+
+3 rows in set (0.01 sec)
+
+mysql> select job_role,avg(salary) from employees group by job_role;
++-----------+-------------+
+| job_role  | avg(salary) |
++-----------+-------------+
+| Manager   | 6500.000000 |
+| Recruiter | 4100.000000 |
+| Developer | 5250.000000 |
+| Tester    | 4650.000000 |
+| Analyst   | 5250.000000 |
++-----------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> select department,max(salary) from employees where department='it' group by department order by desc limit 1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'desc limit 1' at line 1
+mysql> select department,max(salary) from employees where department='it' group by department order by max(salary) desc limit 1;
++------------+-------------+
+| department | max(salary) |
++------------+-------------+
+| IT         |     5500.00 |
++------------+-------------+
+1 row in set (0.01 sec)
+
+mysql> select min(salary) from employees;
++-------------+
+| min(salary) |
++-------------+
+|     4000.00 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select joining_date,count(*) from employees where joining_date>"2023-01-01" group by joining_date;
+ERROR 1054 (42S22): Unknown column 'joining_date' in 'field list'
+mysql> select hire_date,count(*) from employees where hire_date>"2023-01-01" group by hire_date;
++------------+----------+
+| hire_date  | count(*) |
++------------+----------+
+| 2023-03-20 |        1 |
+| 2023-06-10 |        1 |
+| 2023-09-12 |        1 |
+| 2023-08-14 |        1 |
++------------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select hire_date,count(*) from employees group by hire_date having hire_date>"2023-01-01";
++------------+----------+
+| hire_date  | count(*) |
++------------+----------+
+| 2023-03-20 |        1 |
+| 2023-06-10 |        1 |
+| 2023-09-12 |        1 |
+| 2023-08-14 |        1 |
++------------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select count(*) from employees where hire_date>"2023-01-01";
++----------+
+| count(*) |
++----------+
+|        4 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> select department,sum(salary) as totalsalary from employees group by department;
++------------+-------------+
+| department | totalsalary |
++------------+-------------+
+| HR         |    14200.00 |
+| IT         |    19800.00 |
+| Finance    |    17500.00 |
++------------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> select job_role,max(salary) as highestsalary from employees group by job_role order by max(salary) desc limit 1;
++----------+---------------+
+| job_role | highestsalary |
++----------+---------------+
+| Manager  |       7000.00 |
++----------+---------------+
+1 row in set (0.01 sec)
+
+mysql> select job_role,max(salary) as highestsalary from employees group by job_role order by max(salary) desc;
++-----------+---------------+
+| job_role  | highestsalary |
++-----------+---------------+
+| Manager   |       7000.00 |
+| Developer |       5500.00 |
+| Analyst   |       5300.00 |
+| Tester    |       4800.00 |
+| Recruiter |       4200.00 |
++-----------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> select avg(salary) from employees where hire_date>"2022-01-01";
++-------------+
+| avg(salary) |
++-------------+
+| 5100.000000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select department,sum(salary) as total from employees where total>10000 group by department;
+ERROR 1054 (42S22): Unknown column 'total' in 'where clause'
+mysql> select department,sum(salary) as total from employees where sum(salary)>10000 group by department;
+ERROR 1111 (HY000): Invalid use of group function
+mysql> select department,sum(salary) as total from employees group by department having max(salary)>10000;
+Empty set (0.01 sec)
+
+mysql> select department,sum(salary) as total from employees group by department having sum(salary)>10000;
++------------+----------+
+| department | total    |
++------------+----------+
+| HR         | 14200.00 |
+| IT         | 19800.00 |
+| Finance    | 17500.00 |
++------------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select department,count(*) as totalemployees from employees group by department order by department limit 1;
++------------+----------------+
+| department | totalemployees |
++------------+----------------+
+| Finance    |              3 |
++------------+----------------+
+1 row in set (0.01 sec)
+
+mysql> select department,count(*) as totalemployees from employees group by department;
++------------+----------------+
+| department | totalemployees |
++------------+----------------+
+| HR         |              3 |
+| IT         |              4 |
+| Finance    |              3 |
++------------+----------------+
+3 rows in set (0.00 sec)
+
+mysql> select department,count(*) as totalemployees from employees group by department order by department desc limit 1;
++------------+----------------+
+| department | totalemployees |
++------------+----------------+
+| IT         |              4 |
++------------+----------------+
+1 row in set (0.00 sec)
+
+
+
+2.
+Student Performance Analysis
+Use the following students table for the queries.
+
+NOTE: use your friends names in the given table.
+Table: students
+mysql> create table if not exists students(student_id int primary key auto_increment,name varchar(20),class int,subject varchar(20),marks int,exam_date date);
+Query OK, 0 rows affected (0.12 sec)
+
+mysql> desc students;
++------------+-------------+------+-----+---------+----------------+
+| Field      | Type        | Null | Key | Default | Extra          |
++------------+-------------+------+-----+---------+----------------+
+| student_id | int         | NO   | PRI | NULL    | auto_increment |
+| name       | varchar(20) | YES  |     | NULL    |                |
+| class      | int         | YES  |     | NULL    |                |
+| subject    | varchar(20) | YES  |     | NULL    |                |
+| marks      | int         | YES  |     | NULL    |                |
+| exam_date  | date        | YES  |     | NULL    |                |
++------------+-------------+------+-----+---------+----------------+
+
+
+student_id name class subject marks exam_date
+1 John 10 Math 85 2023-02-10
+2 Alice 10 Science 78 2023-03-15
+3 Bob 9 Math 92 2023-04-20
+4 David 9 Science 80 2023-05-25
+5 Eve 10 Math 88 2023-06-30
+6 Frank 9 Science 75 2023-07-10
+7 Grace 10 Math 90 2023-08-20
+8 Hank 9 Math 85 2023-09-15
+9 Ivy 10 Science 82 2023-10-10
+10 Jack 9 Science 79 2023-11-05
+mysql> insert into students(name,class,subject,marks,exam_date)
+    -> values
+    -> ("Yash",10,"Math",85,"2023-02-10"),
+    -> ("Muskan",10,"Science",78,"2023-03-15"),
+    -> ("Palak",9,"Math",92,"2023-04-20"),
+    -> ("Niteen",9,"Science",80,"2023-05-25"),
+    -> ("Aryan",10,"Math",88,"2023-06-30"),
+    -> ("Krishna",9,"Science",75,"2023-07-10"),
+    -> ("Nayan",10,"Math",90,"2023-08-20"),
+    -> ("Ajay",9,"Math",85,"2023-09-15"),
+    -> ("Gopal",10,"Science",82,"2023-10-10"),
+    -> ("Sahil",9,"Science",79,"2023-11-05");
+Query OK, 10 rows affected (0.04 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> select * from students;
++------------+---------+-------+---------+-------+------------+
+| student_id | name    | class | subject | marks | exam_date  |
++------------+---------+-------+---------+-------+------------+
+|          1 | Yash    |    10 | Math    |    85 | 2023-02-10 |
+|          2 | Muskan  |    10 | Science |    78 | 2023-03-15 |
+|          3 | Palak   |     9 | Math    |    92 | 2023-04-20 |
+|          4 | Niteen  |     9 | Science |    80 | 2023-05-25 |
+|          5 | Aryan   |    10 | Math    |    88 | 2023-06-30 |
+|          6 | Krishna |     9 | Science |    75 | 2023-07-10 |
+|          7 | Nayan   |    10 | Math    |    90 | 2023-08-20 |
+|          8 | Ajay    |     9 | Math    |    85 | 2023-09-15 |
+|          9 | Gopal   |    10 | Science |    82 | 2023-10-10 |
+|         10 | Sahil   |     9 | Science |    79 | 2023-11-05 |
++------------+---------+-------+---------+-------+------------+
+
+Questions
+Find the total number of students in each class.
+mysql> select Class,count(*) as Total_Student from students group by Class;
++-------+---------------+
+| Class | Total_Student |
++-------+---------------+
+|    10 |             5 |
+|     9 |             5 |
++-------+---------------+
+
+Find the highest marks scored in Math.
+mysql> select subject,max(marks) as Highest from students where subject="math" group by subject;
++---------+---------+
+| subject | Highest |
++---------+---------+
+| Math    |      92 |
++---------+---------+
+
+Find the average marks in each subject.
+mysql> select subject,avg(marks) as Average from students group by subject;
++---------+---------+
+| subject | Average |
++---------+---------+
+| Math    | 88.0000 |
+| Science | 78.8000 |
++---------+---------+
+
+Find the total number of students who scored above 80.
+mysql> select count(*) from students where marks>80;
++----------+
+| count(*) |
++----------+
+|        6 |
++----------+
+
+Find the number of students who took the exam in each month.
+mysql> select exam_date,count(*) from students group by exam_date;
++------------+----------+
+| exam_date  | count(*) |
++------------+----------+
+| 2023-02-10 |        1 |
+| 2023-03-15 |        1 |
+| 2023-04-20 |        1 |
+| 2023-05-25 |        1 |
+| 2023-06-30 |        1 |
+| 2023-07-10 |        1 |
+| 2023-08-20 |        1 |
+| 2023-09-15 |        1 |
+| 2023-10-10 |        1 |
+| 2023-11-05 |        1 |
++------------+----------+
+
+Find the subject where students scored the highest average marks.
+mysql> select subject,avg(marks) from students group by subject order by avg(marks) desc limit 1;
++---------+------------+
+| subject | avg(marks) |
++---------+------------+
+| Math    |    88.0000 |
++---------+------------+
+Find the student who scored the lowest marks in Science.
+mysql> SELECT name,marks from students where subject='science' and (select min(marks) from students where subject='science');
++---------+-------+
+| name    | marks |
++---------+-------+
+| Muskan  |    78 |
+| Niteen  |    80 |
+| Krishna |    75 |
+| Gopal   |    82 |
+| Sahil   |    79 |
++---------+-------+
+
+Find the number of students in each class who scored more than 85.
+mysql> select class,count(*) as total from students where marks>85 group by class;
++-------+-------+
+| class | total |
++-------+-------+
+|     9 |     1 |
+|    10 |     2 |
++-------+-------+
+
+Find the average marks for each subject where the average is above 80.
+mysql> select subject,avg(marks) from students group by subject having avg(marks)>80;
++---------+------------+
+| subject | avg(marks) |
++---------+------------+
+| Math    |    88.0000 |
++---------+------------+
+
+Find the student who scored the highest marks overall.
+mysql> select * from students order by marks desc limit 1;
++------------+-------+-------+---------+-------+------------+
+| student_id | name  | class | subject | marks | exam_date  |
++------------+-------+-------+---------+-------+------------+
+|          3 | Palak |     9 | Math    |    92 | 2023-04-20 |
++------------+-------+-------+---------+-------+------------+
+
+
+
+3.
+NOTE:USE TABLE from QNO 1:Table: employees
+
+Find the total number of employees in each department and display only those departments having more than 2 employees. (GROUP BY + HAVING)
+mysql> select department,count(*) as TotalEmployee from employees group by department having Totalemployee>2;
++------------+---------------+
+| department | TotalEmployee |
++------------+---------------+
+| HR         |             3 |
+| IT         |             4 |
+| Finance    |             3 |
++------------+---------------+
+
+
+Find the total salary paid in each department and display the results in descending order of total salary. (GROUP BY + ORDER BY)
+mysql> select upper(department),sum(salary) as TotalSalary from employees group by department order by totalsalary desc;
++-------------------+-------------+
+| upper(department) | TotalSalary |
++-------------------+-------------+
+| IT                |    19800.00 |
+| FINANCE           |    17500.00 |
+| HR                |    14200.00 |
++-------------------+-------------+
+
+
+Find the job role that has the highest total salary payout, displaying only roles where total salary is above 10,000. (GROUP BY + HAVING + ORDER BY)
+mysql> select job_role,sum(salary) as HighestPayout from employees group by job_role having sum(salary)>10000 order by sum(salary) desc;
++-----------+---------------+
+| job_role  | HighestPayout |
++-----------+---------------+
+| Manager   |      13000.00 |
+| Developer |      10500.00 |
+| Analyst   |      10500.00 |
++-----------+---------------+
+
+
+Find the average salary of employees who joined after 2022, displaying only job roles where the average salary is above 4500. (WHERE + GROUP BY + HAVING)
+mysql> select job_role,avg(salary) from employees where hire_date>"2022-01-01" group by job_role having avg(salary)>4500;
++-----------+-------------+
+| job_role  | avg(salary) |
++-----------+-------------+
+| Manager   | 6500.000000 |
+| Developer | 5000.000000 |
+| Tester    | 4650.000000 |
+| Analyst   | 5300.000000 |
++-----------+-------------+
+
+
+Find departments where the total salary exceeds 10,000 and order the results in ascending order of department name. (GROUP BY + HAVING + ORDER BY)
+
+mysql> select department,sum(salary) as totalsalary from employees group by department having sum(salary)>10000 order by totalsalary;
++------------+-------------+
+| department | totalsalary |
++------------+-------------+
+| HR         |    14200.00 |
+| Finance    |    17500.00 |
+| IT         |    19800.00 |
++------------+-------------+
+
+4.
+
+Find the average marks in each subject and display only subjects where the average is above 80. (GROUP BY + HAVING)
+mysql> select subject,avg(marks) from students group by subject having avg(marks)>80;
++---------+------------+
+| subject | avg(marks) |
++---------+------------+
+| Math    |    88.0000 |
++---------+------------+
+
+Find the total number of students in each class and order them by class in descending order. (GROUP BY + ORDER BY)
+mysql> select class,sum(marks) from students group by class order by sum(marks) desc;
++-------+------------+
+| class | sum(marks) |
++-------+------------+
+|    10 |        423 |
+|     9 |        411 |
++-------+------------+
+
+Find the subject where students scored the highest average marks, displaying only subjects where the average is above 85. (GROUP BY + HAVING + ORDER BY)
+mysql> select subject,avg(marks) from students group by subject having avg(marks)>85 order by avg(marks) desc limit 1;
++---------+------------+
+| subject | avg(marks) |
++---------+------------+
+| Math    |    88.0000 |
++---------+------------+
+
+
+Find the student who scored the highest marks overall. (ORDER BY + LIMIT 1)
+mysql> select * from students order by marks desc limit 1;
++------------+-------+-------+---------+-------+------------+
+| student_id | name  | class | subject | marks | exam_date  |
++------------+-------+-------+---------+-------+------------+
+|          3 | Palak |     9 | Math    |    92 | 2023-04-20 |
++------------+-------+-------+---------+-------+------------+
+1 row in set (0.00 sec)
+
+Find the number of students in each class who scored more than 85, displaying only classes with more than 2 such students. (GROUP BY + HAVING)
+mysql> select class,count(*) as total from students where marks>85 group by class having total>2;
+Empty set (0.00 sec)

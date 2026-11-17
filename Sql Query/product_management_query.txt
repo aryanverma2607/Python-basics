@@ -1,0 +1,223 @@
+Assignment 2 — Product Management System
+
+Table: products
+
+
+
+Create a products table with:
+
+
+
+Product ID
+
+Product Name
+
+Category
+
+Brand
+
+City
+
+Price
+
+Stock
+
+Rating
+
+Manufacturing Date
+
+mysql> create table product(Product_id int primary key auto_increment,pname varchar(20),category varchar(20),brand varchar(20),city varchar(20),price int,stock int,rating int,manufacturing_date date);
+
+Data Requirements
+
+
+
+
+Insert at least 8 products.
+
+
+
+Your data should include:
+
+
+
+Categories: Electronics, Furniture, Clothing, Grocery
+
+At least 5 different brands
+
+Cities: Indore, Bhopal, Pune, Mumbai, Delhi
+
+Price: ₹500 to ₹1,00,000
+
+Stock: 0 to 100
+
+Rating: 1 to 5
+
+Manufacturing dates from 2021 to 2026
+
+Some products with the same category
+
+Some products with the same brand
+
+Some similar prices
+
+Some products with zero stock
+
+mysql> INSERT INTO product
+    -> (pname, category, brand, city, price, stock, rating, manufacturing_date)
+    -> VALUES
+    -> ('Laptop', 'Electronics', 'HP', 'Indore', 55000, 20, 5, '2024-05-15'),
+    -> ('Smartphone', 'Electronics', 'Samsung', 'Bhopal', 25000, 35, 4, '2025-02-10'),
+    -> ('Headphones', 'Electronics', 'Sony', 'Pune', 2500, 50, 4, '2023-08-20'),
+    -> ('Smart TV', 'Electronics', 'LG', 'Mumbai', 45000, 0, 5, '2024-11-12'),
+    ->
+    -> ('Sofa', 'Furniture', 'IKEA', 'Delhi', 35000, 8, 5, '2024-03-20'),
+    -> ('Dining Table', 'Furniture', 'Godrej', 'Indore', 18000, 10, 4, '2023-07-14'),
+    -> ('Office Chair', 'Furniture', 'IKEA', 'Bhopal', 5500, 25, 4, '2025-04-10'),
+    ->
+    -> ('T-Shirt', 'Clothing', 'Nike', 'Pune', 1200, 45, 4, '2025-06-01'),
+    -> ('Jeans', 'Clothing', 'Levis', 'Mumbai', 2500, 30, 5, '2024-04-12'),
+    -> ('Jacket', 'Clothing', 'Puma', 'Delhi', 4500, 20, 4, '2023-10-08'),
+    -> ('Sneakers', 'Clothing', 'Nike', 'Indore', 5500, 0, 5, '2025-09-19'),
+    ->
+    -> ('Rice', 'Grocery', 'India Gate', 'Bhopal', 800, 70, 5, '2025-01-20'),
+    -> ('Wheat Flour', 'Grocery', 'Aashirvaad', 'Pune', 500, 100, 4, '2024-12-10'),
+    -> ('Cooking Oil', 'Grocery', 'Fortune', 'Mumbai', 1500, 55, 4, '2023-06-15'),
+    -> ('Sugar', 'Grocery', 'Madhur', 'Delhi', 500, 0, 3, '2022-09-05');
+
+
+
+
+
+SQL Queries
+
+1\. Find products whose price is greater than ₹30,000 AND rating is at least 4, but exclude products from Mumbai.
+
+mysql> select * from product where price>30000 and rating>=4 and city<>"Mumbai";
+
+
+
+2\. Find products whose stock is less than 20 OR price is greater than ₹75,000, and whose category is not Grocery.
+
+
+mysql> select * from product where (stock<20 or price>75000) and (category<>"grocery");
+
+
+3\. Find products whose price is between ₹15,000 and ₹60,000 AND rating is between 3 and 5, and which were manufactured after 2022.
+
+mysql> select * from product where price between 15000 and 60000 and rating between 3 and 5 and manufacturing_date>"2022-01-01";
+
+
+
+4\. Find products from Indore, Pune, or Delhi whose price is greater than ₹20,000 AND stock is not 0.
+
+mysql> select * from product where city in ('indore','pune','delhi') and price>20000 and stock<>0;
+
+
+
+
+5\. Find products belonging to Electronics or Furniture using IN.
+
+
+mysql> select * from product where category in ('electronics','furniture');
+
+
+6\. Find products belonging to Electronics, Clothing, or Grocery using IN.
+
+
+mysql> select * from product where category in ('electronics','clothing','grocery');
+
+
+7\. Find products that are not from Indore or Bhopal using NOT IN.
+
+
+mysql> select * from product where city not in ('indore','bhopal');
+
+
+
+8\. Find products whose brand is not Samsung, LG, or Sony.
+
+
+mysql> select * from product where brand not in ('lg','samsung','sony');
+
+
+9\. Find products whose price is between ₹10,000 and ₹50,000.
+
+mysql> select * from product where price between 10000 and 50000;
+
+
+
+
+10\. Find products whose stock is between 20 and 60.
+
+
+mysql> select * from product where stock between 20 and 60;
+
+
+
+11\. Find products whose rating is between 3 and 5, and whose price is greater than ₹20,000.
+
+
+mysql> select * from product where rating between 3 and 5 and price>20000;
+
+
+
+
+12\. Find products manufactured between 2023 and 2025, whose category is Electronics or Furniture.
+
+
+mysql> select * from product where category in ('electronics','furniture') and manufacturing_date between "2023-01-01" and "2025-12-31";
+
+
+
+13\. Find products whose name starts with S.
+
+
+mysql> select * from product where pname like "s%";
+
+
+14\. Find products whose name contains phone anywhere.
+
+
+
+mysql> select * from product where pname like "%phone%";
+
+
+
+
+
+15\. Find products whose brand ends with a.
+
+
+mysql> select * from product where pname like "a%";
+
+
+16\. Find products from Indore or Pune, whose price is between ₹20,000 and ₹70,000, and whose rating is at least 4.
+
+mysql> select * from product where city in ('indore','pune') and price between 20000 and 70000 and rating >= 4;
+
+
+
+17\. Find products belonging to Electronics or Furniture, whose stock is greater than 10, whose price is less than ₹60,000, and whose manufacturing date is after 2022.
+
+
+
+
+
+18\. Find products whose name contains the letter a, whose price is NOT between ₹10,000 and ₹50,000, and whose stock is greater than 5.
+
+
+
+
+
+
+19\. Find products manufactured between 2022 and 2025, belonging to Electronics, Clothing, or Furniture, having a rating greater than 3, and whose city is not Mumbai.
+
+
+
+
+20\. Find products whose name starts with S or M, whose city is not Indore or Mumbai, whose price is between ₹15,000 and ₹80,000, whose rating is at least 4, and whose manufacturing date is after 2023.
+
+
+
+

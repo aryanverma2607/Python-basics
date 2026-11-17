@@ -1,0 +1,1017 @@
+# MYSQL JOINS – ASSIGNMENT
+
+## CASE STUDY: COMPANY MANAGEMENT SYSTEM
+
+ABC Technologies wants to develop a Company Management System.
+
+The company wants to generate different reports related to employees, departments, projects, and employee project activities using MySQL JOINs.
+
+You are given the following four tables and their data.
+
+---
+
+# TABLE 1: DEPARTMENT
+
+**Table Name:** department
+
+### Structure
+
+| Column Name | Data Type | Description |
+|---|---|---|
+| dept_id | INT | Department ID |
+| dept_name | VARCHAR(30) | Department Name |
+
+mysql> CREATE TABLE department (
+    ->     dept_id INT PRIMARY KEY,
+    ->     dept_name VARCHAR(30)
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+### Data
+
+| dept_id | dept_name |
+|---|---|
+| 1 | HR |
+| 2 | IT |
+| 3 | Finance |
+| 4 | Sales |
+| 5 | Marketing |
+| 6 | Research |
+| 7 | Admin |
+
+mysql> INSERT INTO department VALUES
+    -> (1, 'HR'),
+    -> (2, 'IT'),
+    -> (3, 'Finance'),
+    -> (4, 'Sales'),
+    -> (5, 'Marketing'),
+    -> (6, 'Research'),
+    -> (7, 'Admin');
+Query OK, 7 rows affected (0.01 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM department;
++---------+-----------+
+| dept_id | dept_name |
++---------+-----------+
+|       1 | HR        |
+|       2 | IT        |
+|       3 | Finance   |
+|       4 | Sales     |
+|       5 | Marketing |
+|       6 | Research  |
+|       7 | Admin     |
++---------+-----------+
+7 rows in set (0.00 sec)
+
+---
+
+# TABLE 2: EMPLOYEE
+
+**Table Name:** employee
+
+### Structure
+
+| Column Name | Data Type | Description |
+|---|---|---|
+| emp_id | INT | Employee ID |
+| emp_name | VARCHAR(30) | Employee Name |
+| salary | DECIMAL(10,2) | Employee Salary |
+| dept_id | INT | Department ID |
+| manager_id | INT | Manager ID |
+
+mysql> CREATE TABLE employee (
+    ->     emp_id INT PRIMARY KEY,
+    ->     emp_name VARCHAR(30),
+    ->     salary DECIMAL(10,2),
+    ->     dept_id INT,
+    ->     manager_id INT,
+    ->     FOREIGN KEY (dept_id) REFERENCES department(dept_id),
+    ->     FOREIGN KEY (manager_id) REFERENCES employee(emp_id)
+    -> );
+Query OK, 0 rows affected (0.09 sec)
+
+### Data
+
+| emp_id | emp_name | salary | dept_id | manager_id |
+|---|---|---:|---|---|
+| 101 | Amit | 60000 | 1 | NULL |
+| 102 | Rahul | 50000 | 2 | 101 |
+| 103 | Priya | 42000 | 2 | 101 |
+| 104 | Neha | 65000 | 3 | 101 |
+| 105 | Rohit | 35000 | 3 | 104 |
+| 106 | Sneha | 45000 | 4 | 104 |
+| 107 | Karan | 55000 | 4 | 104 |
+| 108 | Pooja | 30000 | 1 | 101 |
+| 109 | Vijay | 75000 | 2 | 102 |
+| 110 | Ankit | 32000 | 5 | 102 |
+| 111 | Meena | 68000 | 3 | 104 |
+| 112 | Arjun | 25000 | 5 | 110 |
+| 113 | Tara | 40000 | NULL | 102 |
+
+mysql> INSERT INTO employee VALUES
+    -> (101, 'Amit', 60000, 1, NULL),
+    -> (102, 'Rahul', 50000, 2, 101),
+    -> (103, 'Priya', 42000, 2, 101),
+    -> (104, 'Neha', 65000, 3, 101),
+    -> (105, 'Rohit', 35000, 3, 104),
+    -> (106, 'Sneha', 45000, 4, 104),
+    -> (107, 'Karan', 55000, 4, 104),
+    -> (108, 'Pooja', 30000, 1, 101),
+    -> (109, 'Vijay', 75000, 2, 102),
+    -> (110, 'Ankit', 32000, 5, 102),
+    -> (111, 'Meena', 68000, 3, 104),
+    -> (112, 'Arjun', 25000, 5, 110),
+    -> (113, 'Tara', 40000, NULL, 102);
+Query OK, 13 rows affected (0.01 sec)
+Records: 13  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM employee;
++--------+----------+----------+---------+------------+
+| emp_id | emp_name | salary   | dept_id | manager_id |
++--------+----------+----------+---------+------------+
+|    101 | Amit     | 60000.00 |       1 |       NULL |
+|    102 | Rahul    | 50000.00 |       2 |        101 |
+|    103 | Priya    | 42000.00 |       2 |        101 |
+|    104 | Neha     | 65000.00 |       3 |        101 |
+|    105 | Rohit    | 35000.00 |       3 |        104 |
+|    106 | Sneha    | 45000.00 |       4 |        104 |
+|    107 | Karan    | 55000.00 |       4 |        104 |
+|    108 | Pooja    | 30000.00 |       1 |        101 |
+|    109 | Vijay    | 75000.00 |       2 |        102 |
+|    110 | Ankit    | 32000.00 |       5 |        102 |
+|    111 | Meena    | 68000.00 |       3 |        104 |
+|    112 | Arjun    | 25000.00 |       5 |        110 |
+|    113 | Tara     | 40000.00 |    NULL |        102 |
++--------+----------+----------+---------+------------+
+13 rows in set (0.00 sec)
+
+
+---
+
+# TABLE 3: PROJECT
+
+**Table Name:** project
+
+### Structure
+
+| Column Name | Data Type | Description |
+|---|---|---|
+| project_id | INT | Project ID |
+| project_name | VARCHAR(50) | Project Name |
+| dept_id | INT | Department ID |
+| budget | INT | Project Budget |
+
+mysql> CREATE TABLE project (
+    ->     project_id INT PRIMARY KEY,
+    ->     project_name VARCHAR(50),
+    ->     dept_id INT,
+    ->     budget INT,
+    ->     FOREIGN KEY (dept_id) REFERENCES department(dept_id)
+    -> );
+Query OK, 0 rows affected (0.07 sec)
+
+### Data
+
+| project_id | project_name | dept_id | budget |
+|---|---|---|---:|
+| 201 | Payroll System | 1 | 200000 |
+| 202 | Website Development | 2 | 500000 |
+| 203 | Banking Application | 3 | 700000 |
+| 204 | CRM System | 4 | 300000 |
+| 205 | Inventory System | 5 | 150000 |
+| 206 | AI Research | 6 | 900000 |
+| 207 | Mobile Application | 2 | 250000 |
+
+mysql> INSERT INTO project VALUES
+    -> (201, 'Payroll System', 1, 200000),
+    -> (202, 'Website Development', 2, 500000),
+    -> (203, 'Banking Application', 3, 700000),
+    -> (204, 'CRM System', 4, 300000),
+    -> (205, 'Inventory System', 5, 150000),
+    -> (206, 'AI Research', 6, 900000),
+    -> (207, 'Mobile Application', 2, 250000);
+Query OK, 7 rows affected (0.01 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM project;
++------------+---------------------+---------+--------+
+| project_id | project_name        | dept_id | budget |
++------------+---------------------+---------+--------+
+|        201 | Payroll System      |       1 | 200000 |
+|        202 | Website Development |       2 | 500000 |
+|        203 | Banking Application |       3 | 700000 |
+|        204 | CRM System          |       4 | 300000 |
+|        205 | Inventory System    |       5 | 150000 |
+|        206 | AI Research         |       6 | 900000 |
+|        207 | Mobile Application  |       2 | 250000 |
++------------+---------------------+---------+--------+
+7 rows in set (0.00 sec)
+
+---
+
+# TABLE 4: EMPLOYEE_PROJECT
+
+**Table Name:** employee_project
+
+### Structure
+
+| Column Name | Data Type | Description |
+|---|---|---|
+| emp_id | INT | Employee ID |
+| project_id | INT | Project ID |
+| hours_worked | INT | Total Working Hours |
+
+mysql> CREATE TABLE employee_project (
+    ->     emp_id INT,
+    ->     project_id INT,
+    ->     hours_worked INT,
+    ->     FOREIGN KEY (emp_id) REFERENCES employee(emp_id),
+    ->     FOREIGN KEY (project_id) REFERENCES project(project_id)
+    -> );
+Query OK, 0 rows affected (0.07 sec)
+
+### Data
+
+| emp_id | project_id | hours_worked |
+|---|---|---:|
+| 101 | 201 | 20 |
+| 102 | 202 | 40 |
+| 102 | 207 | 15 |
+| 103 | 202 | 30 |
+| 104 | 203 | 35 |
+| 105 | 203 | 20 |
+| 106 | 204 | 25 |
+| 107 | 204 | 30 |
+| 109 | 202 | 45 |
+| 110 | 205 | 20 |
+| 111 | 203 | 25 |
+
+mysql> INSERT INTO employee_project VALUES
+    -> (101, 201, 20),
+    -> (102, 202, 40),
+    -> (102, 207, 15),
+    -> (103, 202, 30),
+    -> (104, 203, 35),
+    -> (105, 203, 20),
+    -> (106, 204, 25),
+    -> (107, 204, 30),
+    -> (109, 202, 45),
+    -> (110, 205, 20),
+    -> (111, 203, 25);
+Query OK, 11 rows affected (0.01 sec)
+Records: 11  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM employee_project;
++--------+------------+--------------+
+| emp_id | project_id | hours_worked |
++--------+------------+--------------+
+|    101 |        201 |           20 |
+|    102 |        202 |           40 |
+|    102 |        207 |           15 |
+|    103 |        202 |           30 |
+|    104 |        203 |           35 |
+|    105 |        203 |           20 |
+|    106 |        204 |           25 |
+|    107 |        204 |           30 |
+|    109 |        202 |           45 |
+|    110 |        205 |           20 |
+|    111 |        203 |           25 |
++--------+------------+--------------+
+11 rows in set (0.00 sec)
+
+---
+
+## IMPORTANT NOTES
+
+1. Department 6 has no employees.
+2. Department 7 has no employees and no projects.
+3. Employee 113 is not assigned to any department.
+4. Some employees are not assigned to any project.
+5. Project 206 has no employees assigned.
+6. Employee 102 is working on two projects.
+7. The employee table contains manager IDs that refer to other employees in the same table.
+
+These records are provided to practice different JOIN conditions.
+
+---
+
+# QUESTIONS
+
+## PART A: INNER JOIN
+
+**Q1.**
+
+The HR department wants to display all employees with their respective department names.
+
+Write a query using INNER JOIN.
+select * from employees as e inner join departments as d on e.dept_id=d.dept_id;
+
+**Q2.**
+
+The IT department wants to see its employees.
+
+Display employee ID, employee name, salary, and department name for employees working in IT.
+
+mysql> select emp_id,emp_name,salary,dept_name from employee as e inner join department as d on d.dept_id=e.dept_id where dept_name='it';
++--------+----------+----------+-----------+
+| emp_id | emp_name | salary   | dept_name |
++--------+----------+----------+-----------+
+|    102 | Rahul    | 50000.00 | IT        |
+|    103 | Priya    | 42000.00 | IT        |
+|    109 | Vijay    | 75000.00 | IT        |
++--------+----------+----------+-----------+
+3 rows in set (0.01 sec)
+
+**Q3.**
+
+The company wants to find employees earning more than 50000.
+
+Display employee name, salary, and department name.
+
+mysql> select emp_name,salary,dept_name from employee as e inner join department as d on d.dept_id=e.dept_id where salary>50000;
++----------+----------+-----------+
+| emp_name | salary   | dept_name |
++----------+----------+-----------+
+| Amit     | 60000.00 | HR        |
+| Neha     | 65000.00 | Finance   |
+| Karan    | 55000.00 | Sales     |
+| Vijay    | 75000.00 | IT        |
+| Meena    | 68000.00 | Finance   |
++----------+----------+-----------+
+5 rows in set (0.00 sec)
+
+
+**Q4.**
+
+The management wants to display all projects along with their department names and budgets.
+
+mysql> select * from project as p inner join department as d on p.dept_id=d.dept_id;
++------------+---------------------+---------+--------+---------+-----------+
+| project_id | project_name        | dept_id | budget | dept_id | dept_name |
++------------+---------------------+---------+--------+---------+-----------+
+|        201 | Payroll System      |       1 | 200000 |       1 | HR        |
+|        202 | Website Development |       2 | 500000 |       2 | IT        |
+|        203 | Banking Application |       3 | 700000 |       3 | Finance   |
+|        204 | CRM System          |       4 | 300000 |       4 | Sales     |
+|        205 | Inventory System    |       5 | 150000 |       5 | Marketing |
+|        206 | AI Research         |       6 | 900000 |       6 | Research  |
+|        207 | Mobile Application  |       2 | 250000 |       2 | IT        |
++------------+---------------------+---------+--------+---------+-----------+
+7 rows in set (0.00 sec)
+
+**Q5.**
+
+Display employees who work in the Finance or Sales department.
+
+mysql> SELECT * FROM EMPLOYEE AS E INNER JOIN DEPARTMENT AS D ON D.DEPT_ID=E.DEPT_ID WHERE DEPT_NAME IN ('FINANCE','SALES');
++--------+----------+----------+---------+------------+---------+-----------+
+| emp_id | emp_name | salary   | dept_id | manager_id | dept_id | dept_name |
++--------+----------+----------+---------+------------+---------+-----------+
+|    104 | Neha     | 65000.00 |       3 |        101 |       3 | Finance   |
+|    105 | Rohit    | 35000.00 |       3 |        104 |       3 | Finance   |
+|    111 | Meena    | 68000.00 |       3 |        104 |       3 | Finance   |
+|    106 | Sneha    | 45000.00 |       4 |        104 |       4 | Sales     |
+|    107 | Karan    | 55000.00 |       4 |        104 |       4 | Sales     |
++--------+----------+----------+---------+------------+---------+-----------+
+5 rows in set (0.01 sec)
+
+---
+
+## PART B: LEFT JOIN AND RIGHT JOIN
+
+**Q6.**
+
+The HR department wants a complete employee list, including employees who are not assigned to any department.
+
+Write a query using LEFT JOIN.
+
+mysql> select * from department as d left join employee as e on e.dept_id=d.dept_id;
++---------+-----------+--------+----------+----------+---------+------------+
+| dept_id | dept_name | emp_id | emp_name | salary   | dept_id | manager_id |
++---------+-----------+--------+----------+----------+---------+------------+
+|       1 | HR        |    101 | Amit     | 60000.00 |       1 |       NULL |
+|       1 | HR        |    108 | Pooja    | 30000.00 |       1 |        101 |
+|       2 | IT        |    102 | Rahul    | 50000.00 |       2 |        101 |
+|       2 | IT        |    103 | Priya    | 42000.00 |       2 |        101 |
+|       2 | IT        |    109 | Vijay    | 75000.00 |       2 |        102 |
+|       3 | Finance   |    104 | Neha     | 65000.00 |       3 |        101 |
+|       3 | Finance   |    105 | Rohit    | 35000.00 |       3 |        104 |
+|       3 | Finance   |    111 | Meena    | 68000.00 |       3 |        104 |
+|       4 | Sales     |    106 | Sneha    | 45000.00 |       4 |        104 |
+|       4 | Sales     |    107 | Karan    | 55000.00 |       4 |        104 |
+|       5 | Marketing |    110 | Ankit    | 32000.00 |       5 |        102 |
+|       5 | Marketing |    112 | Arjun    | 25000.00 |       5 |        110 |
+|       6 | Research  |   NULL | NULL     |     NULL |    NULL |       NULL |
+|       7 | Admin     |   NULL | NULL     |     NULL |    NULL |       NULL |
++---------+-----------+--------+----------+----------+---------+------------+
+14 rows in set (0.00 sec)
+
+**Q7.**
+
+Find employees who do not belong to any department.
+
+mysql> select * from employee as e left join department as d on e.dept_id=d.dept_id where dept_name is null;
++--------+----------+----------+---------+------------+---------+-----------+
+| emp_id | emp_name | salary   | dept_id | manager_id | dept_id | dept_name |
++--------+----------+----------+---------+------------+---------+-----------+
+|    113 | Tara     | 40000.00 |    NULL |        102 |    NULL | NULL      |
++--------+----------+----------+---------+------------+---------+-----------+
+1 row in set (0.00 sec)
+
+**Q8.**
+
+The management wants to see all departments with their employees, including departments that have no employees.
+
+mysql> select * from employee as e right join department as d on d.dept_id=e.dept_id;
++--------+----------+----------+---------+------------+---------+-----------+
+| emp_id | emp_name | salary   | dept_id | manager_id | dept_id | dept_name |
++--------+----------+----------+---------+------------+---------+-----------+
+|    101 | Amit     | 60000.00 |       1 |       NULL |       1 | HR        |
+|    108 | Pooja    | 30000.00 |       1 |        101 |       1 | HR        |
+|    102 | Rahul    | 50000.00 |       2 |        101 |       2 | IT        |
+|    103 | Priya    | 42000.00 |       2 |        101 |       2 | IT        |
+|    109 | Vijay    | 75000.00 |       2 |        102 |       2 | IT        |
+|    104 | Neha     | 65000.00 |       3 |        101 |       3 | Finance   |
+|    105 | Rohit    | 35000.00 |       3 |        104 |       3 | Finance   |
+|    111 | Meena    | 68000.00 |       3 |        104 |       3 | Finance   |
+|    106 | Sneha    | 45000.00 |       4 |        104 |       4 | Sales     |
+|    107 | Karan    | 55000.00 |       4 |        104 |       4 | Sales     |
+|    110 | Ankit    | 32000.00 |       5 |        102 |       5 | Marketing |
+|    112 | Arjun    | 25000.00 |       5 |        110 |       5 | Marketing |
+|   NULL | NULL     |     NULL |    NULL |       NULL |       6 | Research  |
+|   NULL | NULL     |     NULL |    NULL |       NULL |       7 | Admin     |
++--------+----------+----------+---------+------------+---------+-----------+
+14 rows in set (0.00 sec)
+
+**Q9.**
+
+Find the departments that currently have no employees.mysql> select * from department as d left join employee as e on e.dept_id=d.dept_id where e.dept_id is null;
++---------+-----------+--------+----------+--------+---------+------------+
+| dept_id | dept_name | emp_id | emp_name | salary | dept_id | manager_id |
++---------+-----------+--------+----------+--------+---------+------------+
+|       6 | Research  |   NULL | NULL     |   NULL |    NULL |       NULL |
+|       7 | Admin     |   NULL | NULL     |   NULL |    NULL |       NULL |
++---------+-----------+--------+----------+--------+---------+------------+
+2 rows in set (0.00 sec)
+
+**Q10.**
+
+The company wants to display all departments and their projects, including departments that have no projects.
+
+Use RIGHT JOIN.
+
+mysql> select * from project as p right join department as d on d.dept_id=p.dept_id;
++------------+---------------------+---------+--------+---------+-----------+
+| project_id | project_name        | dept_id | budget | dept_id | dept_name |
++------------+---------------------+---------+--------+---------+-----------+
+|        201 | Payroll System      |       1 | 200000 |       1 | HR        |
+|        202 | Website Development |       2 | 500000 |       2 | IT        |
+|        207 | Mobile Application  |       2 | 250000 |       2 | IT        |
+|        203 | Banking Application |       3 | 700000 |       3 | Finance   |
+|        204 | CRM System          |       4 | 300000 |       4 | Sales     |
+|        205 | Inventory System    |       5 | 150000 |       5 | Marketing |
+|        206 | AI Research         |       6 | 900000 |       6 | Research  |
+|       NULL | NULL                |    NULL |   NULL |       7 | Admin     |
++------------+---------------------+---------+--------+---------+-----------+
+8 rows in set (0.00 sec)
+
+---
+
+## PART C: FULL OUTER JOIN
+
+MySQL does not directly support FULL OUTER JOIN.
+
+**Q11.**
+
+The management wants a complete report of all employees and departments.
+
+Display all employees and all departments, including unmatched records.
+
+Use LEFT JOIN, RIGHT JOIN, and UNION.
+mysql> select * from employee as e left join department as d on e.dept_id=d.dept_id union select * from employee as e right join department as d on e.dept_id=d.dept_id;
++--------+----------+----------+---------+------------+---------+-----------+
+| emp_id | emp_name | salary   | dept_id | manager_id | dept_id | dept_name |
++--------+----------+----------+---------+------------+---------+-----------+
+|    101 | Amit     | 60000.00 |       1 |       NULL |       1 | HR        |
+|    102 | Rahul    | 50000.00 |       2 |        101 |       2 | IT        |
+|    103 | Priya    | 42000.00 |       2 |        101 |       2 | IT        |
+|    104 | Neha     | 65000.00 |       3 |        101 |       3 | Finance   |
+|    105 | Rohit    | 35000.00 |       3 |        104 |       3 | Finance   |
+|    106 | Sneha    | 45000.00 |       4 |        104 |       4 | Sales     |
+|    107 | Karan    | 55000.00 |       4 |        104 |       4 | Sales     |
+|    108 | Pooja    | 30000.00 |       1 |        101 |       1 | HR        |
+|    109 | Vijay    | 75000.00 |       2 |        102 |       2 | IT        |
+|    110 | Ankit    | 32000.00 |       5 |        102 |       5 | Marketing |
+|    111 | Meena    | 68000.00 |       3 |        104 |       3 | Finance   |
+|    112 | Arjun    | 25000.00 |       5 |        110 |       5 | Marketing |
+|    113 | Tara     | 40000.00 |    NULL |        102 |    NULL | NULL      |
+|   NULL | NULL     |     NULL |    NULL |       NULL |       6 | Research  |
+|   NULL | NULL     |     NULL |    NULL |       NULL |       7 | Admin     |
++--------+----------+----------+---------+------------+---------+-----------+
+15 rows in set (0.00 sec)
+
+**Q12.**
+
+Find employees without departments and departments without employees in a single result.
+
+Use FULL OUTER JOIN simulation.
+
+mysql> select * from employee as e left join department as d on e.dept_id=d.dept_id where d.dept_id is null
+    -> union
+    -> select * from department as d left join employee as e on d.dept_id=e.dept_id where e.emp_id is null;
++--------+----------+----------+---------+------------+---------+-----------+
+| emp_id | emp_name | salary   | dept_id | manager_id | dept_id | dept_name |
++--------+----------+----------+---------+------------+---------+-----------+
+|    113 | Tara     | 40000.00 | NULL    |     102.00 |    NULL | NULL      |
+|      6 | Research |     NULL | NULL    |       NULL |    NULL | NULL      |
+|      7 | Admin    |     NULL | NULL    |       NULL |    NULL | NULL      |
++--------+----------+----------+---------+------------+---------+-----------+
+3 rows in set (0.00 sec)
+---
+
+## PART D: SELF JOIN
+
+**Q13.**
+
+The company wants to display each employee's name along with their manager's name.
+
+Use SELF JOIN.
+
+mysql> SELECT E.EMP_NAME AS EMPLOYEE,M.EMP_NAME AS MANAGER FROM EMPLOYEE AS E JOIN EMPLOYEE AS M ON E.MANAGER_ID=M.EMP_ID;
++----------+---------+
+| EMPLOYEE | MANAGER |
++----------+---------+
+| Rahul    | Amit    |
+| Priya    | Amit    |
+| Neha     | Amit    |
+| Rohit    | Neha    |
+| Sneha    | Neha    |
+| Karan    | Neha    |
+| Pooja    | Amit    |
+| Vijay    | Rahul   |
+| Ankit    | Rahul   |
+| Meena    | Neha    |
+| Arjun    | Ankit   |
+| Tara     | Rahul   |
++----------+---------+
+12 rows in set (0.00 sec)
+
+**Q14.**
+
+Find employees who do not have any manager.
+
+mysql> SELECT * FROM EMPLOYEE AS E LEFT JOIN EMPLOYEE M ON E.MANAGER_ID=M.EMP_ID WHERE E.MANAGER_ID IS NULL;
++--------+----------+----------+---------+------------+--------+----------+--------+---------+------------+
+| emp_id | emp_name | salary   | dept_id | manager_id | emp_id | emp_name | salary | dept_id | manager_id |
++--------+----------+----------+---------+------------+--------+----------+--------+---------+------------+
+|    101 | Amit     | 60000.00 |       1 |       NULL |   NULL | NULL     |   NULL |    NULL |       NULL |
++--------+----------+----------+---------+------------+--------+----------+--------+---------+------------+
+1 row in set (0.00 sec)
+
+**Q15.**
+
+The management wants to find employees whose salary is greater than their manager's salary.
+
+Display employee name, employee salary, manager name, and manager salary.
+
+mysql> SELECT E.EMP_NAME AS EMPLOYEE,E.SALARY AS SALARY,M.EMP_NAME AS MANAGER,M.SALARY AS MANAGER_SALARY FROM EMPLOYEE AS E JOIN EMPLOYEE M ON E.MANAGER_ID=M.EMP_ID WHERE E.SALARY>M.SALARY;
++----------+----------+---------+----------------+
+| EMPLOYEE | SALARY   | MANAGER | MANAGER_SALARY |
++----------+----------+---------+----------------+
+| Neha     | 65000.00 | Amit    |       60000.00 |
+| Vijay    | 75000.00 | Rahul   |       50000.00 |
+| Meena    | 68000.00 | Neha    |       65000.00 |
++----------+----------+---------+----------------+
+3 rows in set (0.00 sec)
+
+**Q16.**
+
+Find employees who report to the same manager.
+
+Display both employee names and their manager's name.
+
+mysql> SELECT E.EMP_NAME AS EMPLOYEE_NAME,E1.EMP_NAME,M.EMP_NAME AS MANAGER_NAME FROM EMPLOYEE AS E JOIN EMPLOYEE AS M ON E.MANAGER_ID=M.EMP_ID JOIN EMPLOYEE AS E1 ON E1.MANAGER_ID=M.EMP_ID WHERE E.MANAGER_ID=E1.MANAGER_ID AND E.EMP_ID<E1.EMP_ID;
++---------------+----------+--------------+
+| EMPLOYEE_NAME | EMP_NAME | MANAGER_NAME |
++---------------+----------+--------------+
+| Rahul         | Priya    | Amit         |
+| Rahul         | Neha     | Amit         |
+| Rahul         | Pooja    | Amit         |
+| Priya         | Neha     | Amit         |
+| Priya         | Pooja    | Amit         |
+| Neha          | Pooja    | Amit         |
+| Rohit         | Sneha    | Neha         |
+| Rohit         | Karan    | Neha         |
+| Rohit         | Meena    | Neha         |
+| Sneha         | Karan    | Neha         |
+| Sneha         | Meena    | Neha         |
+| Karan         | Meena    | Neha         |
+| Vijay         | Ankit    | Rahul        |
+| Vijay         | Tara     | Rahul        |
+| Ankit         | Tara     | Rahul        |
++---------------+----------+--------------+
+15 rows in set (0.00 sec)
+
+---
+
+## PART E: MULTIPLE TABLE JOINS
+
+**Q17.**
+
+The project manager wants a report containing employee names, project names, and working hours.
+
+Use the employee, employee_project, and project tables.
+
+mysql> SELECT E.EMP_NAME AS EMPLOYEE_NAME,P.PROJECT_NAME AS PROJECT,W.HOURS_WORKED FROM EMPLOYEE AS E JOIN EMPLOYEE_PROJECT AS W ON E.EMP_ID=W.EMP_ID JOIN PROJECT AS P ON P.PROJECT_ID=W.PROJECT_ID;
++---------------+---------------------+--------------+
+| EMPLOYEE_NAME | PROJECT             | HOURS_WORKED |
++---------------+---------------------+--------------+
+| Amit          | Payroll System      |           20 |
+| Rahul         | Website Development |           40 |
+| Priya         | Website Development |           30 |
+| Vijay         | Website Development |           45 |
+| Neha          | Banking Application |           35 |
+| Rohit         | Banking Application |           20 |
+| Meena         | Banking Application |           25 |
+| Sneha         | CRM System          |           25 |
+| Karan         | CRM System          |           30 |
+| Ankit         | Inventory System    |           20 |
+| Rahul         | Mobile Application  |           15 |
++---------------+---------------------+--------------+
+11 rows in set (0.00 sec)
+
+**Q18.**
+
+Display project names along with their department names and budgets.
+
+mysql> SELECT P.PROJECT_NAME AS NAME,D.DEPT_NAME AS DEPARTMENT_NAME,P.BUDGET AS BUDGET FROM PROJECT AS P JOIN DEPARTMENT AS D ON D.DEPT_ID=P.DEPT_ID;
++---------------------+-----------------+--------+
+| NAME                | DEPARTMENT_NAME | BUDGET |
++---------------------+-----------------+--------+
+| Payroll System      | HR              | 200000 |
+| Website Development | IT              | 500000 |
+| Banking Application | Finance         | 700000 |
+| CRM System          | Sales           | 300000 |
+| Inventory System    | Marketing       | 150000 |
+| AI Research         | Research        | 900000 |
+| Mobile Application  | IT              | 250000 |
++---------------------+-----------------+--------+
+7 rows in set (0.00 sec)
+
+**Q19.**
+
+The company wants a complete employee project report.
+
+Display employee name, department name, project name, and working hours.
+
+mysql> SELECT E.EMP_NAME,D.DEPT_NAME,P.PROJECT_NAME,W.HOURS_WORKED FROM EMPLOYEE AS E JOIN EMPLOYEE_PROJECT AS W ON E.EMP_ID=W.EMP_ID JOIN PROJECT AS P ON P.PROJECT_ID=W.PROJECT_ID JOIN DEPARTMENT AS D ON D.DEPT_ID=P.DEPT_ID;
++----------+-----------+---------------------+--------------+
+| EMP_NAME | DEPT_NAME | PROJECT_NAME        | HOURS_WORKED |
++----------+-----------+---------------------+--------------+
+| Amit     | HR        | Payroll System      |           20 |
+| Rahul    | IT        | Website Development |           40 |
+| Priya    | IT        | Website Development |           30 |
+| Vijay    | IT        | Website Development |           45 |
+| Neha     | Finance   | Banking Application |           35 |
+| Rohit    | Finance   | Banking Application |           20 |
+| Meena    | Finance   | Banking Application |           25 |
+| Sneha    | Sales     | CRM System          |           25 |
+| Karan    | Sales     | CRM System          |           30 |
+| Ankit    | Marketing | Inventory System    |           20 |
+| Rahul    | IT        | Mobile Application  |           15 |
++----------+-----------+---------------------+--------------+
+11 rows in set (0.00 sec)
+
+**Q20.**
+
+Find employees working on projects having a budget greater than 300000.
+
+Display employee name, project name, and project budget.
+
+mysql> SELECT E.EMP_NAME,P.PROJECT_NAME,P.BUDGET FROM EMPLOYEE AS E JOIN PROJECT AS P ON E.DEPT_ID=P.DEPT_ID WHERE P.BUDGET>300000;
++----------+---------------------+--------+
+| EMP_NAME | PROJECT_NAME        | BUDGET |
++----------+---------------------+--------+
+| Rahul    | Website Development | 500000 |
+| Priya    | Website Development | 500000 |
+| Vijay    | Website Development | 500000 |
+| Neha     | Banking Application | 700000 |
+| Rohit    | Banking Application | 700000 |
+| Meena    | Banking Application | 700000 |
++----------+---------------------+--------+
+6 rows in set (0.00 sec)
+---
+
+## PART F: JOIN WITH GROUP BY AND HAVING
+
+**Q21.**
+
+Find the total number of employees in each department, including departments having zero employees.
+
+mysql> select d.dept_name,count(e.emp_id) from employee as e right join department as d on d.dept_id=e.dept_id group by d.dept_name;
++-----------+-----------------+
+| dept_name | count(e.emp_id) |
++-----------+-----------------+
+| HR        |               2 |
+| IT        |               3 |
+| Finance   |               3 |
+| Sales     |               2 |
+| Marketing |               2 |
+| Research  |               0 |
+| Admin     |               0 |
++-----------+-----------------+
+7 rows in set (0.00 sec)
+
+**Q22.**
+
+Find the average salary of employees in each department.
+
+Display department name and average salary.
+
+mysql> select d.dept_name,avg(e.salary) from employee as e join department as d on d.dept_id=e.dept_id group by d.dept_name;
++-----------+---------------+
+| dept_name | avg(e.salary) |
++-----------+---------------+
+| HR        |  45000.000000 |
+| IT        |  55666.666667 |
+| Finance   |  56000.000000 |
+| Sales     |  50000.000000 |
+| Marketing |  28500.000000 |
++-----------+---------------+
+5 rows in set (0.01 sec)
+
+**Q23.**
+
+Find the total number of employees working on each project, including projects having zero employees.
+
+mysql> select p.project_name,count(e.emp_id) as total_employee from employee as e right join project as p on e.dept_id=p.dept_id group by p.project_name;
++---------------------+----------------+
+| project_name        | total_employee |
++---------------------+----------------+
+| Payroll System      |              2 |
+| Website Development |              3 |
+| Banking Application |              3 |
+| CRM System          |              2 |
+| Inventory System    |              2 |
+| AI Research         |              0 |
+| Mobile Application  |              3 |
++---------------------+----------------+
+7 rows in set (0.00 sec)
+
+
+**Q24.**
+
+The management wants to know the total working hours of each project.
+
+Display project name and total working hours.
+
+mysql> select p.project_name,sum(w.hours_worked) from project as p left join employee_project as w on p.project_id=w.project_id group by p.project_name;
+
++---------------------+---------------------+
+| project_name        | sum(w.hours_worked) |
++---------------------+---------------------+
+| Payroll System      |                  20 |
+| Website Development |                 115 |
+| Banking Application |                  80 |
+| CRM System          |                  55 |
+| Inventory System    |                  20 |
+| AI Research         |                NULL |
+| Mobile Application  |                  15 |
++---------------------+---------------------+
+7 rows in set (0.01 sec)
+
+**Q25.**
+
+Find departments having more than two employees.
+
+Display department name and employee count.
+
+mysql> select d.dept_name,count(emp_id) as employee_count from department as d left join employee as e on d.dept_id=e.dept_id group by d.dept_name having employee_count>2;
++-----------+----------------+
+| dept_name | employee_count |
++-----------+----------------+
+| IT        |              3 |
+| Finance   |              3 |
++-----------+----------------+
+2 rows in set (0.01 sec)
+
+---
+
+## PART G: ADVANCED JOIN QUESTIONS
+
+**Q26.**
+
+Find employees who are working on more than one project.
+
+Display employee name and total project count.
+
+mysql> select e.emp_name,count(p.project_id) from employee as e join employee_project as ep on e.emp_id=ep.emp_id join project as p on p.project_id=ep.project_id group by e.emp_name having count(p.project_id)>1;
++----------+---------------------+
+| emp_name | count(p.project_id) |
++----------+---------------------+
+| Rahul    |                   2 |
++----------+---------------------+
+1 row in set (0.02 sec)
+
+**Q27.**
+
+Find employees who are not assigned to any project but belong to a department.
+
+mysql> select e.emp_id,e.emp_name,d.dept_name from employee as e
+    -> left join employee_project as ep on
+    -> e.emp_id=ep.emp_id join
+    -> department as d on d.dept_id=e.dept_id
+    -> where ep.emp_id is null;
++--------+----------+-----------+
+| emp_id | emp_name | dept_name |
++--------+----------+-----------+
+|    108 | Pooja    | HR        |
+|    112 | Arjun    | Marketing |
++--------+----------+-----------+
+2 rows in set (0.00 sec)
+
+**Q28. CROSS JOIN**
+
+The company wants to generate all possible employee and project combinations, whether an employee is actually working on that project or not.
+
+Write a query using CROSS JOIN.
+
+mysql> select * from employee as e cross join project as p;
++--------+----------+----------+---------+------------+------------+---------------------+---------+--------+
+| emp_id | emp_name | salary   | dept_id | manager_id | project_id | project_name        | dept_id | budget |
++--------+----------+----------+---------+------------+------------+---------------------+---------+--------+
+|    101 | Amit     | 60000.00 |       1 |       NULL |        207 | Mobile Application  |       2 | 250000 |
+|    101 | Amit     | 60000.00 |       1 |       NULL |        206 | AI Research         |       6 | 900000 |
+|    101 | Amit     | 60000.00 |       1 |       NULL |        205 | Inventory System    |       5 | 150000 |
+|    101 | Amit     | 60000.00 |       1 |       NULL |        204 | CRM System          |       4 | 300000 |
+|    101 | Amit     | 60000.00 |       1 |       NULL |        203 | Banking Application |       3 | 700000 |
+|    101 | Amit     | 60000.00 |       1 |       NULL |        202 | Website Development |       2 | 500000 |
+|    101 | Amit     | 60000.00 |       1 |       NULL |        201 | Payroll System      |       1 | 200000 |
+|    102 | Rahul    | 50000.00 |       2 |        101 |        207 | Mobile Application  |       2 | 250000 |
+|    102 | Rahul    | 50000.00 |       2 |        101 |        206 | AI Research         |       6 | 900000 |
+|    102 | Rahul    | 50000.00 |       2 |        101 |        205 | Inventory System    |       5 | 150000 |
+|    102 | Rahul    | 50000.00 |       2 |        101 |        204 | CRM System          |       4 | 300000 |
+|    102 | Rahul    | 50000.00 |       2 |        101 |        203 | Banking Application |       3 | 700000 |
+|    102 | Rahul    | 50000.00 |       2 |        101 |        202 | Website Development |       2 | 500000 |
+|    102 | Rahul    | 50000.00 |       2 |        101 |        201 | Payroll System      |       1 | 200000 |
+|    103 | Priya    | 42000.00 |       2 |        101 |        207 | Mobile Application  |       2 | 250000 |
+|    103 | Priya    | 42000.00 |       2 |        101 |        206 | AI Research         |       6 | 900000 |
+|    103 | Priya    | 42000.00 |       2 |        101 |        205 | Inventory System    |       5 | 150000 |
+|    103 | Priya    | 42000.00 |       2 |        101 |        204 | CRM System          |       4 | 300000 |
+|    103 | Priya    | 42000.00 |       2 |        101 |        203 | Banking Application |       3 | 700000 |
+|    103 | Priya    | 42000.00 |       2 |        101 |        202 | Website Development |       2 | 500000 |
+|    103 | Priya    | 42000.00 |       2 |        101 |        201 | Payroll System      |       1 | 200000 |
+|    104 | Neha     | 65000.00 |       3 |        101 |        207 | Mobile Application  |       2 | 250000 |
+|    104 | Neha     | 65000.00 |       3 |        101 |        206 | AI Research         |       6 | 900000 |
+|    104 | Neha     | 65000.00 |       3 |        101 |        205 | Inventory System    |       5 | 150000 |
+|    104 | Neha     | 65000.00 |       3 |        101 |        204 | CRM System          |       4 | 300000 |
+|    104 | Neha     | 65000.00 |       3 |        101 |        203 | Banking Application |       3 | 700000 |
+|    104 | Neha     | 65000.00 |       3 |        101 |        202 | Website Development |       2 | 500000 |
+|    104 | Neha     | 65000.00 |       3 |        101 |        201 | Payroll System      |       1 | 200000 |
+|    105 | Rohit    | 35000.00 |       3 |        104 |        207 | Mobile Application  |       2 | 250000 |
+|    105 | Rohit    | 35000.00 |       3 |        104 |        206 | AI Research         |       6 | 900000 |
+|    105 | Rohit    | 35000.00 |       3 |        104 |        205 | Inventory System    |       5 | 150000 |
+|    105 | Rohit    | 35000.00 |       3 |        104 |        204 | CRM System          |       4 | 300000 |
+|    105 | Rohit    | 35000.00 |       3 |        104 |        203 | Banking Application |       3 | 700000 |
+|    105 | Rohit    | 35000.00 |       3 |        104 |        202 | Website Development |       2 | 500000 |
+|    105 | Rohit    | 35000.00 |       3 |        104 |        201 | Payroll System      |       1 | 200000 |
+|    106 | Sneha    | 45000.00 |       4 |        104 |        207 | Mobile Application  |       2 | 250000 |
+|    106 | Sneha    | 45000.00 |       4 |        104 |        206 | AI Research         |       6 | 900000 |
+|    106 | Sneha    | 45000.00 |       4 |        104 |        205 | Inventory System    |       5 | 150000 |
+|    106 | Sneha    | 45000.00 |       4 |        104 |        204 | CRM System          |       4 | 300000 |
+|    106 | Sneha    | 45000.00 |       4 |        104 |        203 | Banking Application |       3 | 700000 |
+|    106 | Sneha    | 45000.00 |       4 |        104 |        202 | Website Development |       2 | 500000 |
+|    106 | Sneha    | 45000.00 |       4 |        104 |        201 | Payroll System      |       1 | 200000 |
+|    107 | Karan    | 55000.00 |       4 |        104 |        207 | Mobile Application  |       2 | 250000 |
+|    107 | Karan    | 55000.00 |       4 |        104 |        206 | AI Research         |       6 | 900000 |
+|    107 | Karan    | 55000.00 |       4 |        104 |        205 | Inventory System    |       5 | 150000 |
+|    107 | Karan    | 55000.00 |       4 |        104 |        204 | CRM System          |       4 | 300000 |
+|    107 | Karan    | 55000.00 |       4 |        104 |        203 | Banking Application |       3 | 700000 |
+|    107 | Karan    | 55000.00 |       4 |        104 |        202 | Website Development |       2 | 500000 |
+|    107 | Karan    | 55000.00 |       4 |        104 |        201 | Payroll System      |       1 | 200000 |
+|    108 | Pooja    | 30000.00 |       1 |        101 |        207 | Mobile Application  |       2 | 250000 |
+|    108 | Pooja    | 30000.00 |       1 |        101 |        206 | AI Research         |       6 | 900000 |
+|    108 | Pooja    | 30000.00 |       1 |        101 |        205 | Inventory System    |       5 | 150000 |
+|    108 | Pooja    | 30000.00 |       1 |        101 |        204 | CRM System          |       4 | 300000 |
+|    108 | Pooja    | 30000.00 |       1 |        101 |        203 | Banking Application |       3 | 700000 |
+|    108 | Pooja    | 30000.00 |       1 |        101 |        202 | Website Development |       2 | 500000 |
+|    108 | Pooja    | 30000.00 |       1 |        101 |        201 | Payroll System      |       1 | 200000 |
+|    109 | Vijay    | 75000.00 |       2 |        102 |        207 | Mobile Application  |       2 | 250000 |
+|    109 | Vijay    | 75000.00 |       2 |        102 |        206 | AI Research         |       6 | 900000 |
+|    109 | Vijay    | 75000.00 |       2 |        102 |        205 | Inventory System    |       5 | 150000 |
+|    109 | Vijay    | 75000.00 |       2 |        102 |        204 | CRM System          |       4 | 300000 |
+|    109 | Vijay    | 75000.00 |       2 |        102 |        203 | Banking Application |       3 | 700000 |
+|    109 | Vijay    | 75000.00 |       2 |        102 |        202 | Website Development |       2 | 500000 |
+|    109 | Vijay    | 75000.00 |       2 |        102 |        201 | Payroll System      |       1 | 200000 |
+|    110 | Ankit    | 32000.00 |       5 |        102 |        207 | Mobile Application  |       2 | 250000 |
+|    110 | Ankit    | 32000.00 |       5 |        102 |        206 | AI Research         |       6 | 900000 |
+|    110 | Ankit    | 32000.00 |       5 |        102 |        205 | Inventory System    |       5 | 150000 |
+|    110 | Ankit    | 32000.00 |       5 |        102 |        204 | CRM System          |       4 | 300000 |
+|    110 | Ankit    | 32000.00 |       5 |        102 |        203 | Banking Application |       3 | 700000 |
+|    110 | Ankit    | 32000.00 |       5 |        102 |        202 | Website Development |       2 | 500000 |
+|    110 | Ankit    | 32000.00 |       5 |        102 |        201 | Payroll System      |       1 | 200000 |
+|    111 | Meena    | 68000.00 |       3 |        104 |        207 | Mobile Application  |       2 | 250000 |
+|    111 | Meena    | 68000.00 |       3 |        104 |        206 | AI Research         |       6 | 900000 |
+|    111 | Meena    | 68000.00 |       3 |        104 |        205 | Inventory System    |       5 | 150000 |
+|    111 | Meena    | 68000.00 |       3 |        104 |        204 | CRM System          |       4 | 300000 |
+|    111 | Meena    | 68000.00 |       3 |        104 |        203 | Banking Application |       3 | 700000 |
+|    111 | Meena    | 68000.00 |       3 |        104 |        202 | Website Development |       2 | 500000 |
+|    111 | Meena    | 68000.00 |       3 |        104 |        201 | Payroll System      |       1 | 200000 |
+|    112 | Arjun    | 25000.00 |       5 |        110 |        207 | Mobile Application  |       2 | 250000 |
+|    112 | Arjun    | 25000.00 |       5 |        110 |        206 | AI Research         |       6 | 900000 |
+|    112 | Arjun    | 25000.00 |       5 |        110 |        205 | Inventory System    |       5 | 150000 |
+|    112 | Arjun    | 25000.00 |       5 |        110 |        204 | CRM System          |       4 | 300000 |
+|    112 | Arjun    | 25000.00 |       5 |        110 |        203 | Banking Application |       3 | 700000 |
+|    112 | Arjun    | 25000.00 |       5 |        110 |        202 | Website Development |       2 | 500000 |
+|    112 | Arjun    | 25000.00 |       5 |        110 |        201 | Payroll System      |       1 | 200000 |
+|    113 | Tara     | 40000.00 |    NULL |        102 |        207 | Mobile Application  |       2 | 250000 |
+|    113 | Tara     | 40000.00 |    NULL |        102 |        206 | AI Research         |       6 | 900000 |
+|    113 | Tara     | 40000.00 |    NULL |        102 |        205 | Inventory System    |       5 | 150000 |
+|    113 | Tara     | 40000.00 |    NULL |        102 |        204 | CRM System          |       4 | 300000 |
+|    113 | Tara     | 40000.00 |    NULL |        102 |        203 | Banking Application |       3 | 700000 |
+|    113 | Tara     | 40000.00 |    NULL |        102 |        202 | Website Development |       2 | 500000 |
+|    113 | Tara     | 40000.00 |    NULL |        102 |        201 | Payroll System      |       1 | 200000 |
++--------+----------+----------+---------+------------+------------+---------------------+---------+--------+
+91 rows in set (0.00 sec)
+
+**Q29.**
+
+Find the highest-paid employee in each department.
+
+Display employee name, department name, and salary.
+
+mysql> select e.emp_name,d.dept_name,e.salary from department as d left join employee as e on d.dept_id=e.dept_id where e.salary = (select max(e1.salary) from employee as e1 where e1.dept_id=e.dept_id);
++----------+-----------+----------+
+| emp_name | dept_name | salary   |
++----------+-----------+----------+
+| Amit     | HR        | 60000.00 |
+| Vijay    | IT        | 75000.00 |
+| Meena    | Finance   | 68000.00 |
+| Karan    | Sales     | 55000.00 |
+| Ankit    | Marketing | 32000.00 |
++----------+-----------+----------+
+5 rows in set (0.02 sec)
+
+**Q30.**
+
+The management wants to generate a complete department report containing:
+
+1. Department Name
+2. Total Employees
+3. Total Projects
+4. Total Project Budget
+5. Total Working Hours
+
+mysql> SELECT
+    ->     d.dept_name,
+    ->     COALESCE(e.total_employees, 0) AS total_employees,
+    ->     COALESCE(p.total_projects, 0) AS total_projects,
+    ->     COALESCE(p.total_budget, 0) AS total_project_budget,
+    ->     COALESCE(w.total_hours, 0) AS total_working_hours
+    -> FROM department AS d
+    ->
+    -> LEFT JOIN (
+    ->     SELECT dept_id, COUNT(*) AS total_employees
+    ->     FROM employee
+    ->     GROUP BY dept_id
+    -> ) AS e
+    -> ON d.dept_id = e.dept_id
+    ->
+    -> LEFT JOIN (
+    ->     SELECT dept_id,
+    ->            COUNT(*) AS total_projects,
+    ->            SUM(budget) AS total_budget
+    ->     FROM project
+    ->     GROUP BY dept_id
+    -> ) AS p
+    -> ON d.dept_id = p.dept_id
+    ->
+    -> LEFT JOIN (
+    ->     SELECT p.dept_id,
+    ->            SUM(ep.hours_worked) AS total_hours
+    ->     FROM project AS p
+    ->     JOIN employee_project AS ep
+    ->     ON p.project_id = ep.project_id
+    ->     GROUP BY p.dept_id
+    -> ) AS w
+    -> ON d.dept_id = w.dept_id;
++-----------+-----------------+----------------+----------------------+---------------------+
+| dept_name | total_employees | total_projects | total_project_budget | total_working_hours |
++-----------+-----------------+----------------+----------------------+---------------------+
+| HR        |               2 |              1 |               200000 |                  20 |
+| IT        |               3 |              2 |               750000 |                 130 |
+| Finance   |               3 |              1 |               700000 |                  80 |
+| Sales     |               2 |              1 |               300000 |                  55 |
+| Marketing |               2 |              1 |               150000 |                  20 |
+| Research  |               0 |              1 |               900000 |                   0 |
+| Admin     |               0 |              0 |                    0 |                   0 |
++-----------+-----------------+----------------+----------------------+---------------------+
+7 rows in set (0.02 sec)
+
+Include all departments, even if they have no employees or projects.
+
+Make sure that duplicate rows created by multiple JOINs do not affect the aggregate results.
+
+
+**END OF ASSIGNMENT**
