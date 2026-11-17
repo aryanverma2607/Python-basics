@@ -1,0 +1,7 @@
+print("Exercise12")
+print("Favorite Things")
+food=input("Enter Your Favorite food")
+color=input("Enter Your Favorite color")
+print(f"I like {food} and my favorite color is {color}")
+print("i like {} and my favorite color is {}".format(food,color))
+print("================================")

@@ -1,0 +1,8 @@
+print("Average Speed For Multiple Trips")
+distance1,distance2,time1,time2=map(int,input("Enter distance1 and distance2 and time1 and time2 separated by commas:").split(","))
+Average_speed=((distance1+distance2)//(time1+time2))
+print("Distance1 =",distance1)
+print("Time1 =",time1)
+print("Distance2 =",distance2)
+print("Time2 =",time2)
+print("Average Speed={}".format(Average_speed))

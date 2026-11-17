@@ -1,0 +1,10 @@
+print("Exercise6")
+print("Print User Details")
+print("Enter Your Details")
+name=input("Enter Your Name ")
+age=int(input("Enter Your Age "))
+city=input("Enter Your City ")
+print(f"Name:{name}\nAge:{age}\nCity:{city}")
+
+print("Name:{}\nAge:{}\nCity:{}".format(name,age,city))
+print("================================")

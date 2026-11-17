@@ -1,0 +1,8 @@
+print("Exercise9")
+print("Three Inputs Display")
+first_number=input("Enter a number:")
+second_number=input("Enter a second number:")
+third_number=input("Enter third number")
+print("{}\n{}\n{}".format(first_number,second_number,third_number))
+print(first_number,second_number,third_number,sep="\n")
+print("================================")

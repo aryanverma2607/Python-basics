@@ -1,0 +1,7 @@
+print("Exercise14")
+print("Email Display")
+email=input("Enter your email id:")
+print("Your email is:",email)
+print(f"Your email is: {email}")
+print("Your email is: {}".format(email))
+print("================================")

@@ -1,0 +1,5 @@
+print("Travel Distance Calculator")
+speed=int(input("Enter Speed="))
+hour,minutes=map(int,input("Enter time separated by colan=").split(":"))
+distance=speed*hour+speed*(minutes/60)
+print(f"Distance = {distance}km")

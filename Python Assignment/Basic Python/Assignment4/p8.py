@@ -1,0 +1,5 @@
+print("Compound Interest")
+principal=int(input("Principal = "))
+rate=int(input("Rate = "))
+time=int(input("Time = "))
+print("Compound Interest",principal*(1+(rate/100))**time)

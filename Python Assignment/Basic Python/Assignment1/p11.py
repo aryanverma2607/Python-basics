@@ -1,0 +1,8 @@
+print("Exercise11")
+print("Greeting Message")
+name=input("Enter Your Name")
+print(input("Enter Your Stream"))
+print("Hello ",name)
+print("Welcome to Python")
+print(f"Hello {name}\nWelcome to Python")
+print("================================")

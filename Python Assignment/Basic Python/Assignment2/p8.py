@@ -1,0 +1,12 @@
+#Exercise 8(Multiple input in single line )
+print("Simple Interest Calculator")
+principle,rate,time=map(int,input("Enter Amount and rate and time in year").split())
+principle=int(input("Enter principle amount"))
+rate=int(input("Enter rate"))
+time=int(input("Enter time"))
+print("Principle=",principle)
+print("Rate=",rate)
+print("Time=",time)
+Si=(principle*rate*time)//100
+print("Simple Interest =",Si)
+print("========================================")

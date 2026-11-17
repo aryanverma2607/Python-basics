@@ -1,0 +1,5 @@
+print("Exercise10")
+print("Input and Echo")
+city=input("Enter your address")
+print("You entered:",city)
+print("================================")
